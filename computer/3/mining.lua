@@ -38,15 +38,43 @@ end
 
 -- only works for trees which have a height of 6 XD and currently imnplements the straight path strategy 
 -- gathers atleast the specified amount of wood 
+-- spiral 0 is not accounted for but we should not neeed it because our starting area takes a significant amount up and we dont want to fuck it up
 -- todo add spiral logic ... 
+-- spiral[progress]
+-- spiral[pos]
+-- spiral[ring]
+-- spiral[dir]
+-- ... save and read .... 
+
+-- goes mining in a specified spiral until it gets enough wood. returns true if it found the specified quantity of wood.... 
 function gather_wood(quantity, spiral) 
+
+
+	local spiral = {}
+	spiral["ring"] = 3
+	spiral["pos"] = current_pos
+
 	local wood = 0
 	local upward = false
-	turn(directions["SOUTH"])
-	while wood < quantity do
+	turn(directions["SOUTH"])	
+
+	local spiral_size = 4 + 8*spiral["ring"]
+
+	for prog = 1,spiral_size do
+
+		
+
+		print("progress: "..prog)
+		-- turn turtle left if on one of the 4 edges 
+		if math.fmod(prog, spiral_size / 4) == math.fmod(2 + spiral["ring"],spiral_size / 4)  then
+			print("turning")
+			turtle.turnLeft()
+			current_dir = math.fmod(current_dir -1 +4 , 4)
+		end 
+
+
 		local success, data = turtle.inspect()
-	
-		--check for tree 
+		--check for tree  and kill it
 		print(data.name)
 		if is_wood(data.name) then 
 			move_forward()
@@ -61,18 +89,23 @@ function gather_wood(quantity, spiral)
 				move_down()
 			end
 		else 
-				--logic for walking on surface
-			if (turtle.detectDown() and not turtle.detect()) or (upward and not turtle.detect()) then
-				move_forward()
-				upward = false
-			elseif not turtle.detectDown() and not turtle.detect() and not upward then
-				move_down()
-			else
-				move_up()
-				upward = true
+			-- walk up and down until on a surface and then walk forward
+			while not ((turtle.detectDown() and not turtle.detect()) or (upward and not turtle.detect())) do 
+				if not turtle.detectDown() and not turtle.detect() and not upward then
+					move_down()
+				else
+					move_up()
+					upward = true
+				end
 			end
+			move_forward()
+			upward = false
+		end
+		if wood > quantity then 
+			return true
 		end
 	end
+	return false
 end
 
 function is_wood(blockid)
