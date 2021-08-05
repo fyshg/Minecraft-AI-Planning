@@ -13,8 +13,8 @@ directions["WEST"] = 3
 home = vector.new(-460, 66,207)
 
 --only on first startup else it always gets overwritten by read_pos()
-current_dir = directions["EAST"]
-current_pos = vector.new(-460, 66,207)
+current_dir ={}
+current_pos ={}
 
 
 function write_pos()
@@ -31,47 +31,75 @@ function read_pos()
 	local pos = textutils.unserialize(h.readAll())
 	current_dir = pos["direction"]
 	current_pos = pos["position"]
+	h.close()
+end
 
+-- only needed when starting new turtle 
+function init_turtle()
+
+	current_dir = directions["EAST"]
+	current_pos = vector.new(-460, 66,207)
+	write_pos()
+	spiral = {}
+	spiral["progress"] = 1
+	spiral["dir"] = directions["SOUTH"]  --default value
+	spiral["ring"] = 2
+	spiral["pos"] = current_pos
+	local w = fs.open("gathering.txt", "w")
+	w.write(textutils.serialize(spiral))
+	w.close() 
 end
 
 
 
--- only works for trees which have a height of 6 XD and currently imnplements the straight path strategy 
+
+
+
 -- gathers atleast the specified amount of wood 
 -- spiral 0 is not accounted for but we should not neeed it because our starting area takes a significant amount up and we dont want to fuck it up
--- todo add spiral logic ... 
+-- spiral logic is there progress is saved in the file gathering.txt
 -- spiral[progress]
 -- spiral[pos]
 -- spiral[ring]
 -- spiral[dir]
--- ... save and read .... 
+-- 
+
+
+
+function gather_wood(quantity)
+	local h = fs.open("gathering.txt", "r")
+	local spiral = textutils.unserialize(h.readAll())
+	h.close() 
+
+	local wood = 0; 
+	while wood < quantity do 
+		wood = wood + gather_ring(quantity-wood,spiral)
+	end
+	local w = fs.open("gathering.txt", "w")
+	w.write(textutils.serialize(spiral))
+	w.close() 
+end
 
 -- goes mining in a specified spiral until it gets enough wood. returns true if it found the specified quantity of wood.... 
-function gather_wood(quantity, spiral) 
+-- writes progress to the wood file ...
+function gather_ring(quantity, spiral) 
 
 
-	local spiral = {}
-	spiral["ring"] = 3
-	spiral["pos"] = current_pos
 
 	local wood = 0
 	local upward = false
-	turn(directions["SOUTH"])	
-
+	
+	go_towards(vector.new(spiral["pos"].x, spiral["pos"].y,spiral["pos"].z))
+	turn(spiral["dir"])	
 	local spiral_size = 4 + 8*spiral["ring"]
 
-	for prog = 1,spiral_size do
-
-		
-
-		print("progress: "..prog)
+	for prog = spiral["progress"],spiral_size do
 		-- turn turtle left if on one of the 4 edges 
-		if math.fmod(prog, spiral_size / 4) == math.fmod(2 + spiral["ring"],spiral_size / 4)  then
+		if math.fmod(prog, (spiral_size / 4)) == 2 + spiral["ring"]  then
 			print("turning")
 			turtle.turnLeft()
 			current_dir = math.fmod(current_dir -1 +4 , 4)
 		end 
-
 
 		local success, data = turtle.inspect()
 		--check for tree  and kill it
@@ -90,6 +118,7 @@ function gather_wood(quantity, spiral)
 			end
 		else 
 			-- walk up and down until on a surface and then walk forward
+
 			while not ((turtle.detectDown() and not turtle.detect()) or (upward and not turtle.detect())) do 
 				if not turtle.detectDown() and not turtle.detect() and not upward then
 					move_down()
@@ -101,11 +130,24 @@ function gather_wood(quantity, spiral)
 			move_forward()
 			upward = false
 		end
-		if wood > quantity then 
-			return true
+		if wood >= quantity then 
+			print (current_dir)
+			spiral["progress"] = prog +1
+			spiral["dir"] = current_dir
+			spiral["pos"] = vector.new(current_pos.x, current_pos.y, current_pos.z) -- doing it like this to obtain a copy
+			return wood
 		end
 	end
-	return false
+	--next ring
+	spiral["progress"] = 1
+	spiral["dir"] = directions["SOUTH"]  --default value
+	spiral["ring"] = spiral["ring"] +1
+	spiral["pos"].x = current_pos.x -1   
+	spiral["pos"].y = current_pos.y
+	spiral["pos"].z = current_pos.z 
+
+
+	return wood
 end
 
 function is_wood(blockid)
@@ -260,7 +302,7 @@ end
 
 function go_towards(position)
 	local offset = position - current_pos  --calculates the offset value
-	print(offset.y)
+	print("going toward x: "..position.x.."y: "..position.y.."z: "..position.z)
 	if offset.x > 0 then
 		turn(directions["EAST"])
 	elseif offset.x < 0 then 
@@ -310,19 +352,19 @@ function go_towards(position)
 			end
 		
 	end
-
-	print("go go_towards finisehd")
 end
-
 
 
 read_pos()
 
-gather_wood(3,4)
 
+init_turtle()
+
+gather_wood(3)
+gather_wood(3)
+gather_wood(3)
+gather_wood(3)
 
 go_towards(home)
 
 write_pos()
-
-print(current_dir)
