@@ -1,5 +1,5 @@
 {
-  direction = 0,
+  direction = 1,
   position = {
     y = 66,
     x = -460,

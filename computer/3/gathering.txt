@@ -1,10 +1,10 @@
 {
-  progress = 11,
+  progress = 1,
   pos = {
     y = 66,
-    x = -457,
-    z = 212,
+    x = -460,
+    z = 207,
   },
-  ring = 4,
-  dir = 1,
+  ring = 2,
+  dir = 2,
 }

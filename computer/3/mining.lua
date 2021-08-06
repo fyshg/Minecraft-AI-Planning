@@ -48,6 +48,12 @@ function init_turtle()
 	local w = fs.open("gathering.txt", "w")
 	w.write(textutils.serialize(spiral))
 	w.close() 
+	mining = {}
+	mining["pos"] = vector.new(current_pos.x,60,current_pos.z) -- starting mining spot
+	mining["heigth"] = 0
+	local w = fs.open("mining.txt", "w")
+	w.write(textutils.serialize(mining))
+	w.close()
 end
 
 
@@ -161,97 +167,96 @@ function is_ore(blockid)
 end
 --- 
 function checkForRessources()
-		turn(directions["NORTH"])
-		if is_ore(table.pack(turtle.inspect())[2].name) then
-			turtle.dig()
-		end
-		turn(directions["SOUTH"])
-		if is_ore(table.pack(turtle.inspect())[2].name) then
-			turtle.dig()
-		end
-		if is_ore(table.pack(turtle.inspectUp())[2].name) then 
-			turtle.digUp()
-		end
-		if is_ore(table.pack(turtle.inspectDown())[2].name) then 
-			turtle.digDown()
-		end
+	dir = current_dir
+	turn(directions["NORTH"])
+	if is_ore(table.pack(turtle.inspect())[2].name) then
+		turtle.dig()
+	end
+	turn(directions["SOUTH"])
+	if is_ore(table.pack(turtle.inspect())[2].name) then
+		turtle.dig()
+	end
+	if is_ore(table.pack(turtle.inspectUp())[2].name) then 
+		turtle.digUp()
+	end
+	if is_ore(table.pack(turtle.inspectDown())[2].name) then 
+		turtle.digDown()
+	end
+	turn(dir)
 end
 
 
 
-function mine(itemid, quantity)
+-- expects a dictionary with neccessary items to mite 
+function mine()
 
+	local h = fs.open("mining.txt", "r")
+	local mining = textutils.unserialize(h.readAll())
+	h.close() 
 
-	mining_spot = vector.new(current_pos.x, 55, current_pos.z)
+	local tunnel_length = 5 --low value for testing
+	local mining_heigth = 8 -- corresponds to 4 tunnels per walk upwards ....
+	mining_spot = vector.new(mining["pos"].x, mining["pos"].y, mining["pos"].z)  -- 60
 
-	   
+	heigth = mining["heigth"] --load from file later 
 
-
-	for x = 1,2 do   --replace with while loop which checks for inventory containing certain items
-		
-
-		go_towards(mining_spot) --needs to be loaded from file later on 
+	go_towards(mining_spot)
+	for x = 1,1 do   --replace with while loop which checks for inventory containing certain items
 
 		turn(directions["EAST"])
-		for i = 0,20 do
+		for i = 0,tunnel_length do
 			move_forward()
 			checkForRessources()	
-			turn(directions["EAST"])
 		end
-			move_forward()
+		
 
-		for i = 0,3 do 
+		 --make row in same field
+		heigth = heigth + 2;
+		for i = 1,2 do 
 			move_up()
-		end
+		end	
+		turn(directions["NORTH"])
+		move_forward()
 		
 		--else calculate new mining spot 
 		turn(directions["WEST"])
 
-		for i = 0,20 do
+		for i = 0,tunnel_length do
 			move_forward()
 			checkForRessources()	
-			turn(directions["EAST"])
 		end
+		--check if inventory contains neccessarry ressources
+		-- and save mining progress
+		-- TODO ....
 
-
-		--TODO calculate new mining spot
+		if heigth + 4 < mining_heigth then  --make row in same field
+			heigth = heigth + 2;
+			for i = 1,2 do 
+				move_up()
+			end	
+			turn(directions["NORTH"])
+			move_forward()
+		else 
+			local down = 0; 
+			if height - 7 < 0 then 
+				down = 5
+			else 
+				down = 7 
+			end
+			for i = 1,down do 
+				move_down()
+			end
+			heigth = heigth -down
+		end
 		  
 	end
-
-
 	
-
-	--- mine y*x*z even
-	--[[
-	for y = 1,10  do
-		for x = 1, 10 do
-			if math.fmod(x, 2) == 1 then
-				turn(directions["NORTH"])
-			else 
-				turn(directions["SOUTH"])
-			end
-
-			for z = 1, 10 do 
-				move_forward()
-			end
-			if x ~= 10 then
-					if math.fmod(y, 2) == 1 then
-					move_up()
-				else 
-					move_down()
-				end
-			end
-		end
-
-		turn(directions["EAST"])
-		move_forward()
-	end
-	--]]
-	
-	print("mining finished")
-		--print(turtle.getItemCount())
-
-		-- TODO actually mine for stuff
+	mining["pos"] = current_pos
+	mining["heigth"] = heigth
+	local w = fs.open("mining.txt", "w")
+	w.write(textutils.serialize(mining))
+	w.close()
+		
 	
 end
 
@@ -291,10 +296,28 @@ function move_down()
 end
 
 function turn(dir)
-	while current_dir ~= dir do
-		turtle.turnLeft()
-		current_dir = math.fmod(current_dir -1 +4 , 4)
+	local turn_offset = math.fmod((dir - current_dir) + 4, 4)
+
+	print("offset: "..turn_offset.." dir: "..dir.."current_dir :".. current_dir)
+	if turn_offset == 3 then
+		turn_left()  --distance between directions  
+	elseif turn_offset == 1 then 
+		turn_right()
+	elseif turn_offset == 2 then
+		turn_left()
+		turn_left()
 	end
+end
+
+function turn_left()
+	print(" turning left")
+	turtle.turnLeft()
+	current_dir = math.fmod(current_dir -1 +4 , 4)
+end
+function turn_right()
+	turtle.turnRight()
+	current_dir = math.fmod(current_dir +1 , 4)
+	print(" turning right")
 end
 
 
@@ -360,11 +383,9 @@ read_pos()
 
 init_turtle()
 
-gather_wood(3)
-gather_wood(3)
-gather_wood(3)
-gather_wood(3)
 
+mine()
 go_towards(home)
+mine()
 
 write_pos()
