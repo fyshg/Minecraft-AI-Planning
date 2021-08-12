@@ -5,17 +5,18 @@ maxCount=64 -- how many items of the current recipe can maximally be crafted (fo
 -- but only 10 doors, as 11 need more than 1 stack of planks
 
 function checkInventoryMatchesRecipe()
+	-- returns: true, if inventory matches recipe, false, if not
 	inventory.countInventory()
-	print("inv: ",textutils.serialize(inventory.inv),", end")
+	logger.log("inv: "..textutils.serialize(inventory.inv)..", end")
 	for i=1,3 do
 		for j=1,3 do
 			if rec[i][j]~=nil
 			then
 				if inventory.inv[rec[i][j]]==nil
 				then
-					print("Doesn't Match!")
-					print(textutils.serialize(inventory.inv))
-					print(rec[i][j])
+					logger.log("Doesn't Match!")
+					logger.log(textutils.serialize(inventory.inv))
+					logger.log(rec[i][j])
 					return false
 				else
 					inventory.inv[rec[i][j]]=inventory.inv[rec[i][j]]-count
@@ -26,13 +27,13 @@ function checkInventoryMatchesRecipe()
 	for i in pairs(inventory.inv) do
 		if inventory.inv[i]~=0 
 		then
-			print("Too many or not enough items!")
-			print(inventory.inv[i])
-			print(i)
+			logger.log("Too many or not enough items!")
+			logger.log(inventory.inv[i])
+			logger.log(i)
 			return false
 		end
 	end
-	print("Matches!")
+	logger.log("Matches!")
 	return true
 end
 
@@ -61,7 +62,7 @@ end
 function setRecipe(id,c)
 	count=c or 1
  	if (id=="minecraft:diamond_pickaxe")
- 		then print("Crafting Axe: ",count)
+ 		then logger.log("Crafting Axe: ",count)
  		rec={{"minecraft:diamond","minecraft:diamond","minecraft:diamond"},{nil,"minecraft:stick",nil},{nil,"minecraft:stick",nil}}
  		maxCount=16
  	end

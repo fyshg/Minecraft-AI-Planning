@@ -177,7 +177,7 @@ function storeRest()
 			gotoChest(i)
 			if itemsDesignatedForChest[i]~=nil then
 				for j in pairs(itemsDesignatedForChest[i]) do
-					--print("Putting designated items to chest ",i)
+					--logger.log("Putting designated items to chest ",i)
 					turtle.select(j)
 					turtle.drop(itemsDesignatedForChest[i][j])
 					addItemToChest(i,inventory.items[j].name,itemsDesignatedForChest[i][j])
@@ -186,7 +186,7 @@ function storeRest()
 			end
 			for j in pairs(itemsToStoreInAnyChest) do
 				if chests[i]["stackCount"]<8 then
-					--print("Putting undesignated items to chest",i)
+					--logger.log("Putting undesignated items to chest",i)
 					turtle.select(j)
 					turtle.drop(itemsToStoreInAnyChest[j])
 					addItemToChest(i,inventory.items[j].name,itemsToStoreInAnyChest[j])
@@ -261,7 +261,7 @@ function getmissing()
 					-- elsewise return the rest
 					if chests[i].items[j]~=toGet[i][j] then
 						chests[i].items[ind]=chests[i].items[j]
-						print(chests[i].items[j], toGet[i], toGet[i][j])
+						logger.log(chests[i].items[j].."  "..toGet[i].."  "..toGet[i][j])
 						turtle.drop(chests[i].items[j].count-toGet[i][j])
 						ind=ind+1
 					end
@@ -289,7 +289,7 @@ function addItemToChest(chest,name,count)
 			end
 		end
 	end
-	print("Couldn't find where to put ",count," ",name," in chest",chest)
+	logger.log("Couldn't find where to put "..count.." "..name.." in chest"..chest)
 	return false
 end
 

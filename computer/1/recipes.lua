@@ -5,6 +5,7 @@ maxCount=64 -- how many items of the current recipe can maximally be crafted (fo
 -- but only 10 doors, as 11 need more than 1 stack of planks
 
 function checkInventoryMatchesRecipe()
+	-- returns: true, if inventory matches recipe, false, if not
 	inventory.countInventory()
 	print("inv: ",textutils.serialize(inventory.inv),", end")
 	for i=1,3 do
