@@ -1,0 +1,1 @@
+logger.log(crafting.itemsToCraftAvailable("minecraft:chest",1))

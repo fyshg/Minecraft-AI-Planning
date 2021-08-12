@@ -140,6 +140,7 @@ function inventur()
 end
 
 function storeRest()
+	logger.log("Dropping rest in Chests")
 	--stores everything, which is not needed for the recipe, in chests
 	itemsDesignatedForChest={} --itemsDesignatedForChest[3]=List of items, which should be put in Chest 3
 	itemsToStoreInAnyChest={}
@@ -175,7 +176,7 @@ function storeRest()
 
 --go from one chest to the next and store the items there
 	for i=1,chests.count do
-		if chests[i]["stackCount"]<8 and #itemsToStoreInAnyChest~=0 or itemsDesignatedForChest[i]~=nil then
+		if chests[i]["stackCount"]<8 and generalHelpingFunctions.tableSize(itemsToStoreInAnyChest)~=0 or itemsDesignatedForChest[i]~=nil then
 			gotoChest(i)
 			if itemsDesignatedForChest[i]~=nil then
 				for j in pairs(itemsDesignatedForChest[i]) do
@@ -204,9 +205,25 @@ function storeRest()
 	writeChestFile()
 end
 
-function getmissing()
+function getFromChests(itemname, count)
+	if count==0 then return end
+	logger.log("Getting "..count.." of "..itemname.." from chests")
 	inventory.sortInventory()
-	tmp={} -- List of items needed for crafting, local copy
+	for i in pairs(itemsWanted) do
+		itemsWanted[i]=nil
+	end
+	if inventory.inv[itemname]==nil then
+		itemsWanted[itemname]=count
+	else
+		itemsWanted[itemname]=inventory.inv[itemname]+count
+	end
+	getmissing()
+end
+
+function getmissing()
+	logger.log("Getting missing items!")
+	inventory.sortInventory()
+	local tmp={} -- List of items needed for crafting, local copy
 	for i in pairs(itemsWanted) do
 		tmp[i]=itemsWanted[i]
 		if inventory.inv[i]~=nil then
@@ -215,26 +232,39 @@ function getmissing()
 	end
 
 
+	logger.log("TMP: ")
+	logger.log(tmp)
+	logger.log("end tmp")
+
+
 	--check, in which chests the searched items are
 	toGet={}-- toGet[i][j]= count of items to take from chest i, slot j
-	for i in pairs(chests) do
+	logger.log(chests.count)
+	for i = 1,chests["count"] do
 		toGet[i]={}
 		for j=1,8 do
 			if chests[i].items[j]~=nil then
 				local c=tmp[chests[i].items[j].name]
+				logger.log(chests[i].items[j])
+				logger.log(c)
 				if c~=nil then
 					toGet[i][j]=math.min(c,chests[i].items[j].count)
 					tmp[chests[i].items[j].name]=math.max(0,c-chests[i].items[j].count)
 				end
 			end
 		end
-		if #toGet[i]==0 then
+		logger.log(toGet,"toGet")
+		if generalHelpingFunctions.tableSize(toGet[i])==0 then
 			toGet[i]=nil
 		end
-		if #tmp==0 then 
+		if generalHelpingFunctions.tableSize(tmp)==0 then
 			break
 		end
 	end
+
+	logger.log("ToGet:")
+	logger.log(toGet)
+	logger.log("end of toGet")
 
 --get the items
 	for i in pairs(chests) do
@@ -263,7 +293,7 @@ function getmissing()
 					-- elsewise return the rest
 					if chests[i].items[j]~=toGet[i][j] then
 						chests[i].items[ind]=chests[i].items[j]
-						logger.log(chests[i].items[j].."  "..toGet[i].."  "..toGet[i][j])
+						--logger.log(chests[i].items[j].."  "..toGet[i].."  "..toGet[i][j])
 						turtle.drop(chests[i].items[j].count-toGet[i][j])
 						ind=ind+1
 					end
@@ -309,6 +339,7 @@ function findChestFor(item,count)
 end
 
 function getItemsFor( itemname, count )
+	logger.log("Getting items from chests: for "..itemname.." x "..count)
 	count=count or 1
 	recipes.setRecipe(itemname, count)
 	inventory.countInventory()
@@ -329,7 +360,9 @@ function sumInventoryAndAllChests()
 	logger.log("Summing up inventory and Chests")
 	inventory.countInventory()
 	--reset totalitemcounts
-	totalItemCounts={}
+	for t in pairs(totalItemCounts) do
+		totalItemCounts[t]=nil
+	end
 	--logger.log("Counting in inventory")
 	--count from inventory
 	for i in pairs(inventory.inv) do
@@ -351,7 +384,15 @@ function sumInventoryAndAllChests()
 	end
 end
 
-function checkIfAvailable(itemname, count)
+function maximumItemCountAvailable(itemname, mindReservations)
+	mindReservations = mindReservations or false
+	if totalItemCounts[itemname]==nil then return 0 end
+	if not mindReservations or reserved[itemname]==nil then return totalItemCounts[itemname] end
+	return totalItemCounts[itemname]-reserved[itemname]
+end
+
+function itemsAvailable(itemname, count, mindReservations)
+	mindReservations = mindReservations or false
 	--for i in pairs(totalItemCounts) do
 	--	logger.log(i.."  "..totalItemCounts[i])
 	--end
@@ -360,19 +401,35 @@ function checkIfAvailable(itemname, count)
 	else
 		logger.log(count.." of "..itemname.." wanted, have "..totalItemCounts[itemname])
 	end
+	if mindReservations then
+		if reserved[itemname]==nil then
+		--	logger.log("None are reserved")
+		else
+			logger.log(reserved[itemname].." are already reserved")
+		end
+	end
 	if totalItemCounts[itemname]==nil
 		then return false
-		else return  totalItemCounts[itemname]>=count
+		else
+		if mindReservations and not reserved[itemname]==nil then
+			return  totalItemCounts[itemname]-reserved[itemname]>=count
+		else
+			return  totalItemCounts[itemname]>=count
+		end
+
 	end
 end
 
 function reserve(itemname, count)
-
+	if reserved[itemname]==nil then
+		reserved[itemname]=count
+	else
+		reserved[itemname]=reserved[itemname]+count
+	end
 end
 
-function resetReserved()
-
+function resetReservations()
+	for t in pairs(reserved) do
+		reserved[t]=nil
+	end
 end
-
-
-

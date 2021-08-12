@@ -3,20 +3,20 @@
     stackCount = 4,
     items = {
       {
-        name = "minecraft:diamond",
-        count = 55,
-      },
-      {
-        name = "minecraft:stick",
-        count = 16,
+        name = "minecraft:dirt",
+        count = 20,
       },
       {
         name = "minecraft:birch_planks",
         count = 16,
       },
       {
-        name = "minecraft:dirt",
-        count = 5,
+        name = "minecraft:diamond",
+        count = 64,
+      },
+      {
+        name = "minecraft:stick",
+        count = 22,
       },
     },
   },
@@ -30,8 +30,17 @@
     },
   },
   {
-    stackCount = 0,
-    items = {},
+    stackCount = 2,
+    items = {
+      {
+        name = "minecraft:oak_log",
+        count = 5,
+      },
+      {
+        name = "minecraft:oak_planks",
+        count = 4,
+      },
+    },
   },
   {
     stackCount = 1,

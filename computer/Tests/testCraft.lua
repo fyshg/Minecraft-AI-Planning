@@ -1,0 +1,1 @@
+crafting.craftRecursively("minecraft:chest",1,true,true)
