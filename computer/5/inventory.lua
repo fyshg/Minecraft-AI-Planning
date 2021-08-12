@@ -21,7 +21,7 @@ function countInventory()
 		det=turtle.getItemDetail()
 		items[i]=det
 		if det~=nil then
-			--print(det)
+			--logger.log(det)
 			if inv[det.name]==nil
 			then 
 				inv[det.name]=det.count
@@ -36,16 +36,17 @@ function countInventory()
 			end
 		end
 	end
-	print("Counted inventory!")
+	logger.log("Counted inventory!")
 end
 
 
 function printInventoryNames()
+	logger.log("Printing Inventory Names")
 	for i=1,16 do
 		turtle.select(i)
 		if (turtle.getItemDetail()~=nil)
 		then
-			print(turtle.getItemDetail().name)
+			logger.log(turtle.getItemDetail().name)
 		end
 	end
 end

@@ -1,10 +1,10 @@
 {
   {
-    stackCount = 3,
+    stackCount = 4,
     items = {
       {
         name = "minecraft:diamond",
-        count = 64,
+        count = 55,
       },
       {
         name = "minecraft:stick",
@@ -14,11 +14,20 @@
         name = "minecraft:birch_planks",
         count = 16,
       },
+      {
+        name = "minecraft:dirt",
+        count = 5,
+      },
     },
   },
   {
-    stackCount = 0,
-    items = {},
+    stackCount = 1,
+    items = {
+      {
+        name = "minecraft:dirt",
+        count = 5,
+      },
+    },
   },
   {
     stackCount = 0,

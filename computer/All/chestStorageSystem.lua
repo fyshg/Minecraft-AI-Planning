@@ -1,5 +1,7 @@
 chests={} --contains all information about the count of chests and their content
+totalItemCounts={} -- total item counts over all chests
 itemsWanted={}
+reserved ={} --contains items reserved for crafting and thus not available
 function writeChestFile()
 	--saves the chests table to file
 	local h=fs.open("chests.michi","w")
@@ -293,7 +295,6 @@ function addItemToChest(chest,name,count)
 	return false
 end
 
-
 function findChestFor(item,count)
 	for i=1,chests["count"] do
 		for j=1,chests[i]["stackCount"] do
@@ -306,7 +307,6 @@ function findChestFor(item,count)
 	end
 	return nil
 end
-
 
 function getItemsFor( itemname, count )
 	count=count or 1
@@ -324,3 +324,55 @@ function getItemsFor( itemname, count )
 	--get the missing items
 	getmissing()
 end
+
+function sumInventoryAndAllChests()
+	logger.log("Summing up inventory and Chests")
+	inventory.countInventory()
+	--reset totalitemcounts
+	totalItemCounts={}
+	--logger.log("Counting in inventory")
+	--count from inventory
+	for i in pairs(inventory.inv) do
+		--logger.log(i)
+		--logger.log(inventory.items[i])
+		totalItemCounts[i]=inventory.inv[i]
+	end
+	--logger.log("Counting in chests")
+	--count from chests
+	for i = 1,(chests["count"]) do
+		for j in pairs(chests[i].items) do
+			local ct=chests[i].items[j]
+			if totalItemCounts[ct.name]==nil then
+				totalItemCounts[ct.name]=ct.count
+			else
+				totalItemCounts[ct.name]=totalItemCounts[ct.name]+ct.count
+			end
+		end
+	end
+end
+
+function checkIfAvailable(itemname, count)
+	--for i in pairs(totalItemCounts) do
+	--	logger.log(i.."  "..totalItemCounts[i])
+	--end
+	if totalItemCounts[itemname]==nil then
+		logger.log(count.." of "..itemname.." wanted, have none")
+	else
+		logger.log(count.." of "..itemname.." wanted, have "..totalItemCounts[itemname])
+	end
+	if totalItemCounts[itemname]==nil
+		then return false
+		else return  totalItemCounts[itemname]>=count
+	end
+end
+
+function reserve(itemname, count)
+
+end
+
+function resetReserved()
+
+end
+
+
+
