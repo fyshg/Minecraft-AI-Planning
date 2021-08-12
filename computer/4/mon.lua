@@ -1,2 +1,0 @@
-monitor right hello
-
