@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 public class Spreader {
-    final static int TURTLECOUNT=1;
+    final static int TURTLECOUNT=6;
     public static void main(String[] args) {
         File folder= new File("computer\\All");
         System.out.println(folder.getAbsolutePath());
