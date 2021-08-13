@@ -1,31 +1,18 @@
 {
   {
-    stackCount = 4,
+    stackCount = 3,
     items = {
       {
-        name = "minecraft:dirt",
-        count = 20,
+        name = "computercraft:computer_advanced",
+        count = 64,
       },
       {
         name = "minecraft:birch_planks",
         count = 16,
       },
       {
-        name = "minecraft:diamond",
-        count = 64,
-      },
-      {
-        name = "minecraft:stick",
-        count = 22,
-      },
-    },
-  },
-  {
-    stackCount = 1,
-    items = {
-      {
-        name = "minecraft:dirt",
-        count = 5,
+        name = "minecraft:oak_planks",
+        count = 1,
       },
     },
   },
@@ -33,29 +20,16 @@
     stackCount = 2,
     items = {
       {
-        name = "minecraft:oak_log",
+        name = "minecraft:dirt",
         count = 5,
       },
       {
-        name = "minecraft:oak_planks",
-        count = 4,
+        name = "minecraft:oak_log",
+        count = 59,
       },
     },
-  },
-  {
-    stackCount = 1,
-    items = {
-      {
-        name = "minecraft:stone_bricks",
-        count = 35,
-      },
-    },
-  },
-  {
-    stackCount = 0,
-    items = {},
   },
   rot = 0,
-  count = 5,
+  count = 2,
   pos = 0,
 }

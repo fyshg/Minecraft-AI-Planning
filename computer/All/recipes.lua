@@ -44,12 +44,13 @@ function craftIndexToInvIndex(y,x)
 end
 
 function arrangeInventoryToRecipe()
+	inventory.countInventory()
 	for i=1,16 do
 		if inventory.items[i]~=nil then
 			turtle.select(i)
 			for y=1,3 do
 				for x=1,3 do
-					if rec[y][x]==turtle.getItemDetail().name then
+					if turtle.getItemDetail()~=nil and rec[y][x]==turtle.getItemDetail().name then
 						turtle.transferTo(craftIndexToInvIndex(y,x),count)
 					end
 				end
@@ -70,7 +71,7 @@ function setRecipe(id,c)
  		rec={{"minecraft:diamond","minecraft:diamond","minecraft:diamond"},{nil,"minecraft:stick",nil},{nil,"minecraft:stick",nil}}
  		maxCount=16
 		--count=math.min(count,maxCount)
-		mult=1
+		recipes.mult=1
 		recalculateItemsNeeded()
 		return true;
 	elseif (id=="minecraft:chest")
@@ -78,7 +79,7 @@ function setRecipe(id,c)
 		rec={{"minecraft:oak_planks","minecraft:oak_planks","minecraft:oak_planks"},{"minecraft:oak_planks",nil,"minecraft:oak_planks"},{"minecraft:oak_planks","minecraft:oak_planks","minecraft:oak_planks"}}
 		maxCount=8
 		--count=math.min(count,maxCount)
-		mult=1
+		recipes.mult=1
 		recalculateItemsNeeded()
 		return true;
 	elseif (id=="minecraft:oak_planks")
@@ -86,7 +87,7 @@ function setRecipe(id,c)
 		rec={ { nil,nil,nil},{nil,"minecraft:oak_log",nil },{nil,nil,nil}}
 		maxCount=256
 		--count=math.min(count,maxCount)
-		mult=4
+		recipes.mult=4
 		recalculateItemsNeeded()
 		return true;
  	end
@@ -98,7 +99,7 @@ function recalculateItemsNeeded()
 	for i in pairs(itemsNeeded) do
 		itemsNeeded[i]=nil
 	end
-	local c=math.ceil(count/mult)
+	local c=math.ceil(count/recipes.mult)
 	for i=1,3 do
 		for j=1,3 do
 			if rec[i][j]~=nil then

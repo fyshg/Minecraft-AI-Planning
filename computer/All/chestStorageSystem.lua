@@ -156,20 +156,25 @@ function storeRest()
 		if it~=nil then
 			local putCount=it.count
 			if tmp[it["name"]]~=nil then
-				putCount=math.min(putCount-tmp[it["name"]])
-				tmp[it["name"]]=tmp[it["name"]]-putCount
-				if tmp[it["name"]]==0 then
-					tmp[it["name"]]=nil
+				putCount=math.max(putCount-tmp[it["name"]],0)
+				if putCount~=0 then
+					tmp[it["name"]]=tmp[it["name"]]-putCount
+					if tmp[it["name"]]==0 then
+						tmp[it["name"]]=nil
+					end
+
 				end
 			end
-			-- look for a chest to put "it" in
+			if putCount~=0 then
+				-- look for a chest to put "it" in
 				local target=findChestFor(it.name,putCount)
-				if target==nil then 
-					itemsToStoreInAnyChest[i]=putCount 
+				if target==nil then
+					itemsToStoreInAnyChest[i]=putCount
 				else
 					if itemsDesignatedForChest[target.chestIndex]==nil then itemsDesignatedForChest[target.chestIndex]={} end
 					itemsDesignatedForChest[target.chestIndex][i]=target["count"]
 				end
+			end
 		end
 	end
 
@@ -228,32 +233,25 @@ function getmissing()
 		tmp[i]=itemsWanted[i]
 		if inventory.inv[i]~=nil then
 			tmp[i]=tmp[i]-inventory.inv[i]
+			if tmp[i]==0 then
+				tmp[i]=nil
+			end
 		end
 	end
 
-
-	logger.log("TMP: ")
-	logger.log(tmp)
-	logger.log("end tmp")
-
-
 	--check, in which chests the searched items are
 	toGet={}-- toGet[i][j]= count of items to take from chest i, slot j
-	logger.log(chests.count)
 	for i = 1,chests["count"] do
 		toGet[i]={}
 		for j=1,8 do
 			if chests[i].items[j]~=nil then
 				local c=tmp[chests[i].items[j].name]
-				logger.log(chests[i].items[j])
-				logger.log(c)
 				if c~=nil then
 					toGet[i][j]=math.min(c,chests[i].items[j].count)
 					tmp[chests[i].items[j].name]=math.max(0,c-chests[i].items[j].count)
 				end
 			end
 		end
-		logger.log(toGet,"toGet")
 		if generalHelpingFunctions.tableSize(toGet[i])==0 then
 			toGet[i]=nil
 		end
@@ -262,19 +260,16 @@ function getmissing()
 		end
 	end
 
-	logger.log("ToGet:")
-	logger.log(toGet)
-	logger.log("end of toGet")
-
 --get the items
-	for i in pairs(chests) do
+	for i =  1,chests.count do
 		--if a searched item is in chest i go there
 		if toGet[i]~=nil then
+			logger.log("Getting from chest "..i)
+			logger.log(toGet[i],"from "..i)
 			gotoChest(i)
 			turtle.select(1)
 			-- take all items
 			for j=1,8 do turtle.suck() end
-
 			-- a second counter is needed, as it could happen, that the turtle keeps all items from slot 3, therefore the items from the 4th slot move to the 3rd, the ones from the 5th to the 4th and so on0
 			local ind=1
 			for j=1,8 do
@@ -291,14 +286,23 @@ function getmissing()
 				else
 					--in case of equality, keep all items and therefore don't change anything
 					-- elsewise return the rest
-					if chests[i].items[j]~=toGet[i][j] then
+					if chests[i].items[j].count~=toGet[i][j] then
 						chests[i].items[ind]=chests[i].items[j]
-						--logger.log(chests[i].items[j].."  "..toGet[i].."  "..toGet[i][j])
-						turtle.drop(chests[i].items[j].count-toGet[i][j])
+						local dropCount=chests[i].items[j].count-toGet[i][j]
+						logger.log("Dropcount: "..dropCount)
+						turtle.drop(dropCount)
+						local it={}
+						it.name=chests[i].items[j].name
+						it.count=dropCount
+						chests[i].items[ind]=it
 						ind=ind+1
 					end
 				end
 			end
+			for j=ind,chests[i].stackCount do
+				chests[i][j]=nil
+			end
+			chests[i].stackCount=ind-1
 			inventory.sortInventory()
 		end
 	end

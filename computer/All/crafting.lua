@@ -74,6 +74,7 @@ function craft(itemname, count, checkForAvailability, alsoGetAlreadyExistingItem
     end
     logger.log("Getting items for "..itemname.." x "..(count%recipes.maxCount))
     chestStorageSystem.getItemsFor(itemname,count%recipes.maxCount)
+    recipes.arrangeInventoryToRecipe()
     turtle.craft(count%recipes.maxCount)
     return true
 end
@@ -95,9 +96,13 @@ function craftRecursively(itemname, count, checkForAvailability, alsoGetAlreadyE
             chestStorageSystem.getFromChests(itemname,count)
             return true
         elseif max>0 then
+            recipes.setRecipe(itemname,count-max)
+            local willCraft=recipes.mult*(math.ceil((count-max)/recipes.mult))
+            logger.log("COUNTS: "..itemname.."  "..willCraft.."  "..count-willCraft.."  "..max.."  "..recipes.mult)
             chestStorageSystem.reserve(itemname,max)
             craftRecursively(itemname,count-max,false,false)
-            chestStorageSystem.getFromChests(itemname,max)
+
+            chestStorageSystem.getFromChests(itemname,count-willCraft)
             return true
         end
     end
@@ -109,7 +114,7 @@ logger.log("Still trying to craft "..itemname.." x "..count)
         logger.log("Going to craft directly instead of recursively")
         craft(itemname,count,false,false)
     else
-        logger.log("Time to (re-)curse! Recipe: "..itemname.." x "..count)
+        logger.log("Time to (re-)curse! From: "..itemname.." x "..count)
         --recursion needs to be done
         recipes.setRecipe(itemname,count)
         local tmpItemsNeeded={}
@@ -125,6 +130,7 @@ logger.log("Still trying to craft "..itemname.." x "..count)
         -- now call yourself again, this way:
         -- if now all items are ready, the wanted item will be crafted directly
         -- if one of the necessary items was used for crafting another necessary item, it will be crafted again
+        chestStorageSystem.sumInventoryAndAllChests()
         craftRecursively(itemname,count,false, false)
     end
     return true
