@@ -98,7 +98,8 @@ function craftRecursively(itemname, count, checkForAvailability, alsoGetAlreadyE
         elseif max>0 then
             recipes.setRecipe(itemname,count-max)
             local willCraft=recipes.mult*(math.ceil((count-max)/recipes.mult))
-            logger.log("COUNTS: "..itemname.."  "..willCraft.."  "..count-willCraft.."  "..max.."  "..recipes.mult)
+            --logger.log("COUNTS: "..itemname.."  "..willCraft.."  "..count-willCraft.."  "..max.."  "..recipes.mult)
+            logger.log("Crafting "..willCraft.." and getting the Rest from Chests")
             chestStorageSystem.reserve(itemname,max)
             craftRecursively(itemname,count-max,false,false)
 
@@ -108,10 +109,10 @@ function craftRecursively(itemname, count, checkForAvailability, alsoGetAlreadyE
     end
 
 
-logger.log("Still trying to craft "..itemname.." x "..count)
+--logger.log("Still trying to craft "..itemname.." x "..count)
     if itemsToCraftAvailable(itemname,count,false, false,true) then
         --can be crafted directly
-        logger.log("Going to craft directly instead of recursively")
+        logger.log("Going to craft directly, ingredients available!")
         craft(itemname,count,false,false)
     else
         logger.log("Time to (re-)curse! From: "..itemname.." x "..count)
@@ -131,6 +132,7 @@ logger.log("Still trying to craft "..itemname.." x "..count)
         -- if now all items are ready, the wanted item will be crafted directly
         -- if one of the necessary items was used for crafting another necessary item, it will be crafted again
         chestStorageSystem.sumInventoryAndAllChests()
+        logger.log("Should now have all ingredients. Retrying crafting!")
         craftRecursively(itemname,count,false, false)
     end
     return true

@@ -17,8 +17,7 @@ function countInventory()
 	--inventory.inv={}
 	resetInv()
 	for i=1,16 do
-		turtle.select(i)
-		det=turtle.getItemDetail()
+		det=turtle.getItemDetail(i)
 		items[i]=det
 		if det~=nil then
 			--logger.log(det)
@@ -30,6 +29,7 @@ function countInventory()
 				before=inv[det.name]
 				toPut=math.min(itemstacksizes.getStackSize(det.name)-before, det.count)
 				inv[det.name]=inv[det.name]+toPut
+				turtle.select(i)
 				turtle.transferTo(slot[det.name])
 				items[slot[det.name]].count=items[slot[det.name]].count+toPut
 				items[i]=turtle.getItemDetail()

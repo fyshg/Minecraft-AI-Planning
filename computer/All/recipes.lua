@@ -90,6 +90,54 @@ function setRecipe(id,c)
 		recipes.mult=4
 		recalculateItemsNeeded()
 		return true;
+	elseif (id=="computercraft:computer_normal")
+	then
+		rec={ { "minecraft:stone","minecraft:stone","minecraft:stone"},{"minecraft:stone","minecraft:redstone","minecraft:stone" },{"minecraft:stone","minecraft:glass_pane","minecraft:stone"}}
+		maxCount=9
+		--count=math.min(count,maxCount)
+		recipes.mult=1
+		recalculateItemsNeeded()
+		return true;
+	elseif (id=="computercraft:turtle_normal")
+	then
+		rec={ { "minecraft:iron_ingot","minecraft:iron_ingot","minecraft:iron_ingot"},{"minecraft:iron_ingot","computercraft:computer_normal","minecraft:iron_ingot" },{"minecraft:iron_ingot","minecraft:chest","minecraft:iron_ingot"}}
+		maxCount=9
+		--count=math.min(count,maxCount)
+		recipes.mult=1
+		recalculateItemsNeeded()
+		return true;
+	elseif (id=="minecraft:glass_pane")
+	then
+		rec={ { "minecraft:glass","minecraft:glass","minecraft:glass"},{"minecraft:glass","minecraft:glass","minecraft:glass" },{nil,nil,nil}}
+		maxCount=160
+		--count=math.min(count,maxCount)
+		recipes.mult=16
+		recalculateItemsNeeded()
+		return true;
+	elseif (id=="computercraft:turtle_normal")
+	then
+		rec={ { "minecraft:stone","minecraft:stone","minecraft:stone"},{"minecraft:stone","minecraft:redstone","minecraft:stone" },{"minecraft:stone","minecraft:glass_pane","minecraft:stone"}}
+		maxCount=8
+		--count=math.min(count,maxCount)
+		recipes.mult=1
+		recalculateItemsNeeded()
+		return true;
+	elseif (id=="computercraft:turtle_normal")
+	then
+		rec={ { "minecraft:stone","minecraft:stone","minecraft:stone"},{"minecraft:stone","minecraft:redstone","minecraft:stone" },{"minecraft:stone","minecraft:glass_pane","minecraft:stone"}}
+		maxCount=8
+		--count=math.min(count,maxCount)
+		recipes.mult=1
+		recalculateItemsNeeded()
+		return true;
+	elseif (id=="computercraft:turtle_normal")
+	then
+		rec={ { "minecraft:stone","minecraft:stone","minecraft:stone"},{"minecraft:stone","minecraft:redstone","minecraft:stone" },{"minecraft:stone","minecraft:glass_pane","minecraft:stone"}}
+		maxCount=8
+		--count=math.min(count,maxCount)
+		recipes.mult=1
+		recalculateItemsNeeded()
+		return true;
  	end
 	logger.log("Recipe not found!")
 	return false;

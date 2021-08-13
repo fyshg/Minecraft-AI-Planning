@@ -2,7 +2,7 @@ function resetLog()
     local h=fs.open("log.txt","w")
     h.write(os.date('%Y-%m-%d %H:%M:%S').."\n")
 end
-function log(text, name)
+function log(text, name, silent)
     if text==nil
     then log("nil",name)
         return
@@ -10,7 +10,7 @@ function log(text, name)
 
     if name~=nil then
         local h=fs.open("log.txt","a")
-        print("<"..name..">  ")
+        if not silent then print("<"..name..">  ") end
         h.write("<"..name..">  ")
         h.close()
     end
@@ -18,7 +18,7 @@ function log(text, name)
 
     if type(text)=="table" then
         for i in pairs(text) do
-            log(text[i],i)
+            log(text[i],i, silent)
         end
         return
     end
@@ -28,7 +28,7 @@ function log(text, name)
     end
 
     local h=fs.open("log.txt","a")
-    print(text.."\n")
+    if not silent then print(text.."\n") end
     h.write(text.."\n")
     h.close()
 end
