@@ -7,7 +7,11 @@ import java.nio.file.StandardCopyOption;
 public class Spreader {
     final static int TURTLECOUNT=6;
     final static int [] TURTLESWHICHGETTESTS={5};
+    final static boolean REMOVEREST=true;
     public static void main(String[] args) {
+        if (REMOVEREST){
+            RestRemover.removeRest();
+        }
         File folder= new File("computer\\All");
         for (int i=0;i<TURTLECOUNT;i++){
             File tf=new File("computer\\"+i);
