@@ -108,3 +108,9 @@ function dropAbundantItems(withSorting)
 	end
 	if withSorting and removed then sortInventory(true) end
 end
+
+function countOf(itemname)
+	countInventory()
+	if inv[itemname]==nil then return 0	end
+	return inv[itemname]
+end
