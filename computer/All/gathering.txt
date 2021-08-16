@@ -1,0 +1,10 @@
+{
+  progress = 1,
+  pos = {
+    y = 0,
+    x = 0,
+    z = 0,
+  },
+  ring = 2,
+  dir = 2,
+}
