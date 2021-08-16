@@ -149,6 +149,7 @@ end
 -- please use navigate instead unless you know what you are doing 
 function go_towards(position)
 	print("going towards x: "..position.x.." y: "..position.y.." z: "..position.z)
+	print("from"..current_pos.x)
 	local offset = position - current_pos  --calculates the offset value
 	if offset.x > 0 then
 		turn(directions["EAST"])
@@ -199,6 +200,7 @@ function go_towards(position)
 			end
 		
 	end
+	print("going finished")
 end
 
 

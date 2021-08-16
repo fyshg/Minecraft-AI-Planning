@@ -114,3 +114,19 @@ function countOf(itemname)
 	if inv[itemname]==nil then return 0	end
 	return inv[itemname]
 end
+
+function countLogs()
+	countInventory()
+	local logs = 0
+	logs = logs + countWood("minecraft:spruce_log")
+	logs = logs + countWood("minecraft:birch_log")
+	logs = logs + countWood("minecraft:oak_log")
+	logs = logs + countWood("minecraft:jungle_log")
+	logs = logs + countWood("minecraft:acacia_log")
+	logs = logs + countWood("minecraft:dark_oak_log")
+	return logs
+end
+function countWood(itemname)
+	if inv[itemname]==nil then return 0	end
+	return inv[itemname]
+end

@@ -16,13 +16,14 @@
 -- 
 
 function gather_wood(quantity)
-	local h = fs.open("gathering.txt", "r")
+	local h = fs.open("./gathering.txt", "r")
 	local spiral = textutils.unserialize(h.readAll())
 	h.close() 
 
 	local wood = 0; 
-	while wood < quantity do 
-		wood = wood + gather_ring(quantity-wood,spiral)
+	while wood < quantity do
+		gather_ring(quantity, spiral)
+		wood = inventory.countLogs()
 	end
 	local w = fs.open("gathering.txt", "w")
 	w.write(textutils.serialize(spiral))
@@ -34,7 +35,7 @@ end
 -- also mines sand when encountering it
 function gather_ring(quantity, spiral) 
 
-	local wood = 0
+	print("test")
 	local upward = false
 	
 	movement.go_towards(vector.new(spiral["pos"].x, spiral["pos"].y,spiral["pos"].z))
@@ -54,9 +55,6 @@ function gather_ring(quantity, spiral)
 			movement.move_forward()
 			wood = wood+1
 			for i = 1,6 do
-				if is_wood(table.pack(turtle.inspectUp())[2].name) then
-					wood = wood +1
-				end
 				movement.move_up()
 			end
 			for i = 1,6 do
@@ -79,12 +77,11 @@ function gather_ring(quantity, spiral)
 			movement.move_forward()
 			upward = false
 		end
-		if wood >= quantity then 
-			print (current_dir)
+		if inventory.countWood() >= quantity then
 			spiral["progress"] = prog +1
 			spiral["dir"] = current_dir
 			spiral["pos"] = vector.new(movement.current_pos.x, movement.current_pos.y, movement.current_pos.z) -- doing it like this to obtain a copy
-			return wood
+			return
 		end
 	end
 	--next ring
@@ -93,10 +90,7 @@ function gather_ring(quantity, spiral)
 	spiral["ring"] = spiral["ring"] +1
 	spiral["pos"].x = movement.current_pos.x -1   
 	spiral["pos"].y = movement.current_pos.y
-	spiral["pos"].z = movement.current_pos.z 
-
-
-	return wood
+	spiral["pos"].z = movement.current_pos.z
 end
 
 function is_wood(blockid)	
@@ -111,7 +105,7 @@ function is_ore(blockid)
 	blockid == "minecraft:deepslate_redstone_ore"
 end
 --- 
-function checkForRessources()
+function checkForResources()
 	dir = current_dir
 	movement.turn(movement.directions["NORTH"])
 	if is_ore(table.pack(turtle.inspect())[2].name) then
@@ -151,11 +145,12 @@ function mine(goal)
 		movement.turn(movement.directions["EAST"])
 		for i = 0,tunnel_length do
 			movement.move_forward()
-			checkForRessources()	
+			checkForResources()	
 		end
 		
 
 		 --make row in same field
+
 		heigth = heigth + 2;
 		for i = 1,2 do 
 			movement.move_up()
@@ -168,7 +163,7 @@ function mine(goal)
 
 		for i = 0,tunnel_length do
 			movement.move_forward()
-			checkForRessources()	
+			checkForResources()	
 		end
 		--check if inventory contains neccessarry ressources
 		-- and save mining progress
