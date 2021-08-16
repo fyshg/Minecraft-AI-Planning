@@ -13,6 +13,7 @@ function resetInv()
 		items[i]=nil
 	end
 end
+
 function countInventory()
 	--inventory.inv={}
 	resetInv()
@@ -27,8 +28,8 @@ function countInventory()
 				slot[det.name]=i
 			else
 				before=inv[det.name]
-				toPut=math.min(itemstacksizes.getStackSize(det.name)-before, det.count)
-				inv[det.name]=inv[det.name]+toPut
+				toPut=math.min(itemstacksizesAndMaxCounts.getStackSize(det.name)-before, det.count)
+				inv[det.name]=inv[det.name]+det.count
 				turtle.select(i)
 				turtle.transferTo(slot[det.name])
 				items[slot[det.name]].count=items[slot[det.name]].count+toPut
@@ -38,7 +39,6 @@ function countInventory()
 	end
 	logger.log("Counted inventory!")
 end
-
 
 function printInventoryNames()
 	logger.log("Printing Inventory Names")
@@ -50,7 +50,6 @@ function printInventoryNames()
 		end
 	end
 end
-
 
 function sortInventory()
 	--items in the last slots, first slots empty
@@ -73,4 +72,32 @@ function sortInventory()
 			end
 		end
 	end
+	countInventory()
+end
+
+function dropAbundantItems(withSorting)
+	if withSorting==nil then withSorting=true end
+	removed=false
+	chestStorageSystem.sumInventoryAndAllChests()
+	for i=1,16 do
+		id=turtle.getItemDetail(i)
+		if id~=nil then
+			c=id.count
+			tot=chestStorageSystem.totalItemCounts[id.name]
+			if tot==nil then
+				logger.log("Something strange happened: inventory.DropAbundantItems says tot is nil")
+			else
+				dropCount=math.min(c,tot-itemstacksizesAndMaxCounts.maxCountToKeep(id.name))
+				logger.log(i.."   "..dropCount)
+				if dropCount>0 then
+					removed=true
+					turtle.select(i)
+					turtle.drop(dropCount)
+					chestStorageSystem.totalItemCounts[id.name]=chestStorageSystem.totalItemCounts[id.name]-dropCount
+				end
+			end
+
+		end
+	end
+	if withSorting and removed then sortInventory() end
 end

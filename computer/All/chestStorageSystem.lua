@@ -319,7 +319,7 @@ function addItemToChest(chest,name,count)
 			chests[chest].items[i]={name=name,count=count}
 			return true
 		else
-			if chests[chest].items[i].name==name and chests[chest].items[i].count<itemstacksizes.getStackSize(name) then
+			if chests[chest].items[i].name==name and chests[chest].items[i].count<itemstacksizesAndMaxCounts.getStackSize(name) then
 				chests[chest].items[i].count=chests[chest].items[i].count+count
 				return true
 			end
@@ -333,8 +333,8 @@ function findChestFor(item,count)
 	for i=1,chests["count"] do
 		for j=1,chests[i]["stackCount"] do
 			if chests[i]["items"][j]~=nil and chests[i]["items"][j]["name"]==item then
-				if chests[i]["items"][j]["count"]<itemstacksizes.getStackSize(item) then
-					return {chestIndex=i, count=math.min(count, itemstacksizes.getStackSize(item)-chests[i]["items"][j]["count"])}
+				if chests[i]["items"][j]["count"]<itemstacksizesAndMaxCounts.getStackSize(item) then
+					return {chestIndex=i, count=math.min(count, itemstacksizesAndMaxCounts.getStackSize(item)-chests[i]["items"][j]["count"])}
 				end
 			end
 		end
