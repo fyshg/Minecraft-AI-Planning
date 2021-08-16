@@ -1,7 +1,7 @@
 os.loadAPI("recipes.lua")
 os.loadAPI("chestStorageSystem.lua")
 os.loadAPI("inventory.lua")
-os.loadAPI("itemstacksizes.lua")
+os.loadAPI("itemstacksizesAndMaxCounts.lua")
 os.loadAPI("logger.lua")
 os.loadAPI("crafting.lua")
 os.loadAPI("generalHelpingFunctions.lua")

@@ -39,18 +39,23 @@ end
 
 --a few methods for moving arount and saving the position in order to be able to go back to the start
 function moveForward()
-	while not turtle.forward() do turtle.attack() turtle.dig() end
+	while not turtle.up() do
+		turtle.attackUp()
+		turtle.digUp()
+	end
 	chests["pos"]=chests["pos"]+1
 end
 
 function moveBackwards()
-	while not turtle.back() do
-		turtle.turnLeft()
-		turtle.turnLeft()
-		turtle.attack()
-		turtle.dig()
-		turtle.turnLeft()
-		turtle.turnLeft()
+	while not turtle.down() do
+		--turtle.turnLeft()
+		--turtle.turnLeft()
+		--turtle.attack()
+		--turtle.dig()
+		--turtle.turnLeft()
+		--turtle.turnLeft()
+		turtle.digDown()
+		turtle.attackDown()
 	end
 	chests["pos"]=chests["pos"]-1
 end
@@ -66,23 +71,21 @@ function turnRight()
 end
 
 function gotoChest(index)
+	while chests["pos"]<1+index/4 do
+		moveForward()
+	end
+	while chests["pos"]>1+index/4 do
+		moveBackwards()
+	end
+
+
+	k=rot-index%4
 	--obvious
 	while chests["rot"]<0 do
 		turnRight()
 	end
 	while chests["rot"]>0 do
 		turnLeft()
-	end
-	while chests["pos"]<index+(index%2)-1 do
-		moveForward()
-	end
-	while chests["pos"]>index+(index%2)-1 do
-		moveBackwards()
-	end
-	if index % 2 == 1 then
-		turnLeft()
-	else
-		turnRight()
 	end
 end
 
@@ -319,7 +322,7 @@ function addItemToChest(chest,name,count)
 			chests[chest].items[i]={name=name,count=count}
 			return true
 		else
-			if chests[chest].items[i].name==name and chests[chest].items[i].count<itemstacksizes.getStackSize(name) then
+			if chests[chest].items[i].name==name and chests[chest].items[i].count<itemstacksizesAndMaxCounts.getStackSize(name) then
 				chests[chest].items[i].count=chests[chest].items[i].count+count
 				return true
 			end
@@ -333,8 +336,8 @@ function findChestFor(item,count)
 	for i=1,chests["count"] do
 		for j=1,chests[i]["stackCount"] do
 			if chests[i]["items"][j]~=nil and chests[i]["items"][j]["name"]==item then
-				if chests[i]["items"][j]["count"]<itemstacksizes.getStackSize(item) then
-					return {chestIndex=i, count=math.min(count, itemstacksizes.getStackSize(item)-chests[i]["items"][j]["count"])}
+				if chests[i]["items"][j]["count"]<itemstacksizesAndMaxCounts.getStackSize(item) then
+					return {chestIndex=i, count=math.min(count, itemstacksizesAndMaxCounts.getStackSize(item)-chests[i]["items"][j]["count"])}
 				end
 			end
 		end
