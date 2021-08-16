@@ -71,26 +71,35 @@ function turnRight()
 end
 
 function gotoChest(index)
-	while chests["pos"]<1+index/4 do
+	while chests["pos"]<index/4 do
 		moveForward()
 	end
-	while chests["pos"]>1+index/4 do
+	while chests["pos"]>(index+3)/4 do
 		moveBackwards()
 	end
 
-
-	k=rot-index%4
+	lr=(index-1)%4
+	k=(lr-chests["rot"]+8)%4
+	if k==3 then turnLeft()
+	else
+		while k>0 do
+			turnRight()
+			k=k-1
+		end
+	end
 	--obvious
-	while chests["rot"]<0 do
-		turnRight()
-	end
-	while chests["rot"]>0 do
-		turnLeft()
-	end
+	--while chests["rot"]<0 do
+	--	turnRight()
+	--end
+	--while chests["rot"]>0 do
+	--	turnLeft()
+	--end
 end
 
 function gotoStart()
 	--return to the start
+	if chests["rot"]==3 then chests["rot"]=-1 end
+	if chests["rot"]==-3 then chests["rot"]=1 end
 	while chests["rot"]<0 do
 		turnRight()
 	end
