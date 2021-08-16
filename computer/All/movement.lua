@@ -3,6 +3,7 @@
 
 
 
+
 directions = {} --{"NORTH", "EAST", "SOUTH", "WEST"}
 
 -- lua hat keine enums deshalb diese komische Lösung -- 
@@ -16,11 +17,10 @@ home = vector.new(-460, 66,207)
 current_dir ={}
 current_pos ={}
 
-
 function write_pos()
 	local pos = {}
-	pos["position"] = movement.current_pos
-	pos["direction"] = movement.current_dir
+	pos["position"] = current_pos
+	pos["direction"] = current_dir
 	local h = fs.open("pos.txt", "w")
 	h.write(textutils.serialize(pos))
 	h.close()
@@ -246,3 +246,11 @@ function house_in_the_way(pos)
 
 
 end		   
+
+function test()
+	print(current_pos["x"])
+
+end
+
+-- return {go_towards = go_towards, current_pos = current_pos, current_dir = current_dir,
+	--	move_down = move_down, move_up = move_up, move_forward = move_forward}

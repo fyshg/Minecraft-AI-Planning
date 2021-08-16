@@ -21,7 +21,7 @@ function countInventory()
 		det=turtle.getItemDetail(i)
 		items[i]=det
 		if det~=nil then
-			--logger.log(det)
+			--log(det)
 			if inv[det.name]==nil
 			then 
 				inv[det.name]=det.count
@@ -37,16 +37,16 @@ function countInventory()
 			end
 		end
 	end
-	logger.log("Counted inventory!")
+	log("Counted inventory!")
 end
 
 function printInventoryNames()
-	logger.log("Printing Inventory Names")
+	log("Printing Inventory Names")
 	for i=1,16 do
 		turtle.select(i)
 		if (turtle.getItemDetail()~=nil)
 		then
-			logger.log(turtle.getItemDetail().name)
+			log(turtle.getItemDetail().name)
 		end
 	end
 end
@@ -92,10 +92,10 @@ function dropAbundantItems(withSorting)
 			c=id.count
 			tot=chestStorageSystem.totalItemCounts[id.name]
 			if tot==nil then
-				logger.log("Something strange happened: inventory.DropAbundantItems says tot is nil")
+				log("Something strange happened: inventory.DropAbundantItems says tot is nil")
 			else
 				dropCount=math.min(c,tot-itemstacksizesAndMaxCounts.maxCountToKeep(id.name))
-				logger.log(i.."   "..dropCount)
+				log(i.."   "..dropCount)
 				if dropCount>0 then
 					removed=true
 					turtle.select(i)
@@ -109,24 +109,19 @@ function dropAbundantItems(withSorting)
 	if withSorting and removed then sortInventory(true) end
 end
 
-function countOf(itemname)
-	countInventory()
-	if inv[itemname]==nil then return 0	end
-	return inv[itemname]
-end
 
 function countLogs()
 	countInventory()
 	local logs = 0
-	logs = logs + countWood("minecraft:spruce_log")
-	logs = logs + countWood("minecraft:birch_log")
-	logs = logs + countWood("minecraft:oak_log")
-	logs = logs + countWood("minecraft:jungle_log")
-	logs = logs + countWood("minecraft:acacia_log")
-	logs = logs + countWood("minecraft:dark_oak_log")
+	logs = logs + countOf("minecraft:spruce_log")
+	logs = logs + countOf("minecraft:birch_log")
+	logs = logs + countOf("minecraft:oak_log")
+	logs = logs + countOf("minecraft:jungle_log")
+	logs = logs + countOf("minecraft:acacia_log")
+	logs = logs + countOf("minecraft:dark_oak_log")
 	return logs
 end
-function countWood(itemname)
+function countOf(itemname)
 	if inv[itemname]==nil then return 0	end
 	return inv[itemname]
 end

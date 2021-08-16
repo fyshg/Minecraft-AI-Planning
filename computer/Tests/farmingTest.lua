@@ -1,2 +1,5 @@
-init.init_turtle(args)
-farming.gather_wood(6)
+require("req")
+
+
+init_turtle(arg)
+gather_wood(3)

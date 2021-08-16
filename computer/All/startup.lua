@@ -1,3 +1,4 @@
+--[[
 os.loadAPI("recipes.lua")
 os.loadAPI("chestStorageSystem.lua")
 os.loadAPI("inventory.lua")
@@ -8,5 +9,6 @@ os.loadAPI("generalHelpingFunctions.lua")
 os.loadAPI("movement.lua")
 os.loadAPI("farming.lua")
 os.loadAPI("init.lua")
+--]]
 chestStorageSystem.start()
 logger.resetLog()
