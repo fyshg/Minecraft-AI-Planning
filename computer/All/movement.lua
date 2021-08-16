@@ -19,8 +19,8 @@ current_pos ={}
 
 function write_pos()
 	local pos = {}
-	pos["position"] = current_pos
-	pos["direction"] = current_dir
+	pos["position"] = movement.current_pos
+	pos["direction"] = movement.current_dir
 	local h = fs.open("pos.txt", "w")
 	h.write(textutils.serialize(pos))
 	h.close()

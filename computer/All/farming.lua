@@ -1,4 +1,4 @@
-require 'movement'
+
 
 -- This class contains methods implementing strategies for farming ressources
 
@@ -37,30 +37,30 @@ function gather_ring(quantity, spiral)
 	local wood = 0
 	local upward = false
 	
-	go_towards(vector.new(spiral["pos"].x, spiral["pos"].y,spiral["pos"].z))
-	turn(spiral["dir"])	
+	movement.go_towards(vector.new(spiral["pos"].x, spiral["pos"].y,spiral["pos"].z))
+	movement.turn(spiral["dir"])	
 	local spiral_size = 4 + 8*spiral["ring"]
 
 	for prog = spiral["progress"],spiral_size do
 		-- turn turtle left if on one of the 4 edges 
 		if math.fmod(prog, (spiral_size / 4)) == 2 + spiral["ring"]  then
-			turn_left()
+			movement.turn_left()
 		end 
 
 		local success, data = turtle.inspect()
 		--check for tree  and kill it
 		print(data.name)
 		if is_wood(data.name) then 
-			move_forward()
+			movement.move_forward()
 			wood = wood+1
 			for i = 1,6 do
 				if is_wood(table.pack(turtle.inspectUp())[2].name) then
 					wood = wood +1
 				end
-				move_up()
+				movement.move_up()
 			end
 			for i = 1,6 do
-				move_down()
+				movement.move_down()
 			end
 		else 
 			-- walk up and down until on a surface and then walk forward
@@ -76,30 +76,30 @@ function gather_ring(quantity, spiral)
 			if table.pack(turtle.inspectDown())[2].name == "minecraft:sand" then
 				turtle.digDown()
 			end
-			move_forward()
+			movement.move_forward()
 			upward = false
 		end
 		if wood >= quantity then 
 			print (current_dir)
 			spiral["progress"] = prog +1
 			spiral["dir"] = current_dir
-			spiral["pos"] = vector.new(current_pos.x, current_pos.y, current_pos.z) -- doing it like this to obtain a copy
+			spiral["pos"] = vector.new(movement.current_pos.x, movement.current_pos.y, movement.current_pos.z) -- doing it like this to obtain a copy
 			return wood
 		end
 	end
 	--next ring
 	spiral["progress"] = 1
-	spiral["dir"] = directions["SOUTH"]  --default value
+	spiral["dir"] = movement.directions["SOUTH"]  --default value
 	spiral["ring"] = spiral["ring"] +1
-	spiral["pos"].x = current_pos.x -1   
-	spiral["pos"].y = current_pos.y
-	spiral["pos"].z = current_pos.z 
+	spiral["pos"].x = movement.current_pos.x -1   
+	spiral["pos"].y = movement.current_pos.y
+	spiral["pos"].z = movement.current_pos.z 
 
 
 	return wood
 end
 
-function is_wood(blockid)
+function is_wood(blockid)	
 	return blockid == "minecraft:oak_log" or blockid == "minecraft:spruce_log" or 
 		   blockid == "minecraft:birch_log" or blockid == "minecraft:jungle_log" or 
 		   blockid == "minecraft:acacia_log" or blockid == "minecraft:dark_oak_log"
@@ -113,11 +113,11 @@ end
 --- 
 function checkForRessources()
 	dir = current_dir
-	turn(directions["NORTH"])
+	movement.turn(movement.directions["NORTH"])
 	if is_ore(table.pack(turtle.inspect())[2].name) then
 		turtle.dig()
 	end
-	turn(directions["SOUTH"])
+	movement.turn(movement.directions["SOUTH"])
 	if is_ore(table.pack(turtle.inspect())[2].name) then
 		turtle.dig()
 	end
@@ -127,13 +127,13 @@ function checkForRessources()
 	if is_ore(table.pack(turtle.inspectDown())[2].name) then 
 		turtle.digDown()
 	end
-	turn(dir)
+	movement.turn(dir)
 end
 
 
 
 -- expects a dictionary with neccessary items to mite 
-function mine()
+function mine(goal)
 
 	local h = fs.open("mining.txt", "r")
 	local mining = textutils.unserialize(h.readAll())
@@ -145,12 +145,12 @@ function mine()
 
 	heigth = mining["heigth"] --load from file later 
 
-	go_towards(mining_spot)
+	movement.go_towards(mining_spot)
 	for x = 1,1 do   --replace with while loop which checks for inventory containing certain items
 
-		turn(directions["EAST"])
+		movement.turn(movement.directions["EAST"])
 		for i = 0,tunnel_length do
-			move_forward()
+			movement.move_forward()
 			checkForRessources()	
 		end
 		
@@ -158,16 +158,16 @@ function mine()
 		 --make row in same field
 		heigth = heigth + 2;
 		for i = 1,2 do 
-			move_up()
+			movement.move_up()
 		end	
-		turn(directions["NORTH"])
-		move_forward()
+		movement.turn(movement.directions["NORTH"])
+		movement.move_forward()
 		
 		--else calculate new mining spot 
-		turn(directions["WEST"])
+		movement.turn(movement.directions["WEST"])
 
 		for i = 0,tunnel_length do
-			move_forward()
+			movement.move_forward()
 			checkForRessources()	
 		end
 		--check if inventory contains neccessarry ressources
@@ -179,8 +179,8 @@ function mine()
 			for i = 1,2 do 
 				move_up()
 			end	
-			turn(directions["NORTH"])
-			move_forward()
+			movement.turn(movement.directions["NORTH"])
+			movement.move_forward()
 		else 
 			local down = 0; 
 			if height - 7 < 0 then 
@@ -196,7 +196,7 @@ function mine()
 		  
 	end
 	
-	mining["pos"] = current_pos
+	mining["pos"] = movement.current_pos
 	mining["heigth"] = heigth
 	local w = fs.open("mining.txt", "w")
 	w.write(textutils.serialize(mining))
@@ -207,4 +207,4 @@ end
 
 
 
--- expects xyz as vector and then goes to this position
+
