@@ -51,7 +51,8 @@ function printInventoryNames()
 	end
 end
 
-function sortInventory()
+function sortInventory(reverse)
+	if reverse==nil then reverse = false end
 	--items in the last slots, first slots empty
 	countInventory()
 	local j=16
@@ -59,16 +60,22 @@ function sortInventory()
 		j=j-1 
 	end
 	for i=1,16 do
-		if i>=j then 
-			return 
+		if i>=j then
+			return
 		end
-		if items[i]~=nil then
-			turtle.select(i)
-			turtle.transferTo(j)
-			items[j]=items[i]
-			items[i]=nil
-			while items[j]~=nil do 
-				j=j-1 
+
+		l=j
+		k=i
+		if reverse then k=17-i end
+		if reverse then l=17-j end
+
+		if items[k]~=nil then
+			turtle.select(k)
+			turtle.transferTo(l)
+			items[l]=items[k]
+			items[k]=nil
+			while items[l]~=nil do
+				l=l-1
 			end
 		end
 	end
@@ -99,5 +106,5 @@ function dropAbundantItems(withSorting)
 
 		end
 	end
-	if withSorting and removed then sortInventory() end
+	if withSorting and removed then sortInventory(true) end
 end

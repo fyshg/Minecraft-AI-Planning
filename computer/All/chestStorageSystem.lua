@@ -39,18 +39,23 @@ end
 
 --a few methods for moving arount and saving the position in order to be able to go back to the start
 function moveForward()
-	while not turtle.forward() do turtle.attack() turtle.dig() end
+	while not turtle.up() do
+		turtle.attackUp()
+		turtle.digUp()
+	end
 	chests["pos"]=chests["pos"]+1
 end
 
 function moveBackwards()
-	while not turtle.back() do
-		turtle.turnLeft()
-		turtle.turnLeft()
-		turtle.attack()
-		turtle.dig()
-		turtle.turnLeft()
-		turtle.turnLeft()
+	while not turtle.down() do
+		--turtle.turnLeft()
+		--turtle.turnLeft()
+		--turtle.attack()
+		--turtle.dig()
+		--turtle.turnLeft()
+		--turtle.turnLeft()
+		turtle.digDown()
+		turtle.attackDown()
 	end
 	chests["pos"]=chests["pos"]-1
 end
