@@ -1,1 +1,3 @@
-logger.log(crafting.itemsToCraftAvailable("minecraft:chest",1))
+require("req")
+
+log(itemsToCraftAvailable("minecraft:chest",1))

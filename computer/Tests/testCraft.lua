@@ -1,1 +1,4 @@
-crafting.craftRecursively("minecraft:chest",1,true,true)
+require("req")
+
+
+craftRecursively("minecraft:chest",1,true,true)

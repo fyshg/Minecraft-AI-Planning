@@ -5,7 +5,7 @@
 --chestStorageSystem.readChestFile()
 --print("Chestfile read!")
 
+require("req")
 
-
-chestStorageSystem.getItemsFor("minecraft:diamond_pickaxe",3)
+getItemsFor("minecraft:diamond_pickaxe",3)
 --print(chestStorageSystem.findChestFor("minecraft:stick",11))

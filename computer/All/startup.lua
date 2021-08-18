@@ -1,14 +1,7 @@
 --[[
-os.loadAPI("recipes.lua")
-os.loadAPI("chestStorageSystem.lua")
-os.loadAPI("inventory.lua")
-os.loadAPI("itemstacksizesAndMaxCounts.lua")
-os.loadAPI("logger.lua")
-os.loadAPI("crafting.lua")
-os.loadAPI("generalHelpingFunctions.lua")
-os.loadAPI("movement.lua")
-os.loadAPI("farming.lua")
-os.loadAPI("init.lua")
+
 --]]
-chestStorageSystem.start()
-logger.resetLog()
+
+require("req")
+start() -- chest system
+resetLog()

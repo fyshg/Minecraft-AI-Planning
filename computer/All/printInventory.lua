@@ -1,1 +1,1 @@
-inventory.printInventoryNames()
+printInventoryNames()

@@ -1,17 +1,20 @@
-init.init_turtle(arg)
+require("req")
+
+
+init_turtle(arg)
 
 
 
 
-movement.read_pos()
-movement.navigate(vector.new(-455, 66,209))
-movement.navigate(vector.new(-465, 66,209))
+read_pos()
+navigate(vector.new(-455, 66,209))
+navigate(vector.new(-465, 66,209))
 
-movement.navigate(vector.new(movement.home.x+2, movement.home.y-2, movement.home.z))
+navigate(vector.new(home.x+2, home.y-2, home.z))
 
-movement.navigate(vector.new(-462, 62,220))
-movement.navigate(movement.home)
+navigate(vector.new(-462, 62,220))
+navigate(home)
 
 
 
-movement.write_pos()
+write_pos()

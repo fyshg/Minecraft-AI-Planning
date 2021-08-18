@@ -15,7 +15,7 @@ function resetInv()
 end
 
 function countInventory()
-	--inventory.inv={}
+	--inv={}
 	resetInv()
 	for i=1,16 do
 		det=turtle.getItemDetail(i)
@@ -28,7 +28,7 @@ function countInventory()
 				slot[det.name]=i
 			else
 				before=inv[det.name]
-				toPut=math.min(itemstacksizesAndMaxCounts.getStackSize(det.name)-before, det.count)
+				toPut=math.min(getStackSize(det.name)-before, det.count)
 				inv[det.name]=inv[det.name]+det.count
 				turtle.select(i)
 				turtle.transferTo(slot[det.name])
@@ -85,22 +85,22 @@ end
 function dropAbundantItems(withSorting)
 	if withSorting==nil then withSorting=true end
 	removed=false
-	chestStorageSystem.sumInventoryAndAllChests()
+	sumInventoryAndAllChests()
 	for i=1,16 do
 		id=turtle.getItemDetail(i)
 		if id~=nil then
 			c=id.count
-			tot=chestStorageSystem.totalItemCounts[id.name]
+			tot=totalItemCounts[id.name]
 			if tot==nil then
-				log("Something strange happened: inventory.DropAbundantItems says tot is nil")
+				log("Something strange happened: DropAbundantItems says tot is nil")
 			else
-				dropCount=math.min(c,tot-itemstacksizesAndMaxCounts.maxCountToKeep(id.name))
+				dropCount=math.min(c,tot-maxCountToKeep(id.name))
 				log(i.."   "..dropCount)
 				if dropCount>0 then
 					removed=true
 					turtle.select(i)
 					turtle.drop(dropCount)
-					chestStorageSystem.totalItemCounts[id.name]=chestStorageSystem.totalItemCounts[id.name]-dropCount
+					totalItemCounts[id.name]=totalItemCounts[id.name]-dropCount
 				end
 			end
 
