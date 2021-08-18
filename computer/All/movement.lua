@@ -38,10 +38,11 @@ end
 
 
 function move_forward()
-	if turtle.detect() then
+	repeat
+		if turtle.detect() then
 			turtle.dig()
 		end
-	 turtle.forward()
+	 until (turtle.forward())
 
 	if current_dir == directions["NORTH"] then
 		current_pos.z = current_pos.z -1

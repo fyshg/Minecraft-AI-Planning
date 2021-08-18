@@ -27,7 +27,8 @@ function gather_wood(quantity)
 	end
 	local w = fs.open("gathering.txt", "w")
 	w.write(textutils.serialize(spiral))
-	w.close() 
+	w.close()
+	navigate(home)
 end
 
 function kill_tree()
@@ -53,6 +54,9 @@ function gather_ring(quantity, spiral)
 	local spiral_size = 4 + 8*spiral["ring"]
 
 	for prog = spiral["progress"],spiral_size do
+		if f.mod(spiral["progress"], 64) == 0 then   --drops abundant items all 64 steps
+			dropAbundantItems()
+		end
 		if table.pack(turtle.inspectDown())[2].name == "minecraft:sand" then
 			turtle.digDown()
 		end
@@ -116,7 +120,7 @@ function is_wood(blockid)
 end
 
 function is_ore(blockid)
-	return blockid == "minecraft:diamond_ore" or blockid == "minecraft:iron_ore" or 
+	return blockid == "minecraft:diamond_ore" or blockid == "minecraft:iron_ore" or
 	blockid == "minecraft:coal_ore" or blockid == "minecraft:redstone_ore" or 
 	blockid == "minecraft:deepslate_redstone_ore"
 end
@@ -142,32 +146,30 @@ end
 
 
 
--- expects a dictionary with neccessary items to mite 
+-- expects a dictionary with neccessary items to mite
+-- goal is a table which maps item ids to count
 function mine(goal)
 
 	local h = fs.open("mining.txt", "r")
 	local mining = textutils.unserialize(h.readAll())
 	h.close() 
 
-	local tunnel_length = 5 --low value for testing
-	local mining_heigth = 8 -- corresponds to 4 tunnels per walk upwards ....
+	local tunnel_length = mining["tunnel_length"] --low value for testing
+	local mining_height = mining["mining_height"] -- corresponds to 4 tunnels per walk upwards ....
 	mining_spot = vector.new(mining["pos"].x, mining["pos"].y, mining["pos"].z)  -- 60
 
-	heigth = mining["heigth"] --load from file later 
+	local height = mining["height"] --load from file later
 
 	go_towards(mining_spot)
-	for x = 1,1 do   --replace with while loop which checks for inventory containing certain items
+	while not goal_met(goal) do   --replace with while loop which checks for inventory containing certain items
 
 		turn(directions["EAST"])
 		for i = 0,tunnel_length do
 			move_forward()
 			checkForResources()	
 		end
-		
-
 		 --make row in same field
-
-		heigth = heigth + 2;
+		height = height + 2;
 		for i = 1,2 do 
 			move_up()
 		end	
@@ -181,12 +183,10 @@ function mine(goal)
 			move_forward()
 			checkForResources()	
 		end
-		--check if inventory contains neccessarry ressources
-		-- and save mining progress
-		-- TODO ....
 
-		if heigth + 4 < mining_heigth then  --make row in same field
-			heigth = heigth + 2;
+
+		if height + 4 < mining_height then  --make row in same field
+			height = height + 2;
 			for i = 1,2 do 
 				move_up()
 			end	
@@ -202,20 +202,33 @@ function mine(goal)
 			for i = 1,down do 
 				move_down()
 			end
-			heigth = heigth -down
+			height = height -down
 		end
-		  
+		  print("reached end of while")
 	end
 	
 	mining["pos"] = current_pos
-	mining["heigth"] = heigth
+	mining["height"] = height
 	local w = fs.open("mining.txt", "w")
 	w.write(textutils.serialize(mining))
 	w.close()
 		
-	
+	navigate(home)
 end
 
+function goal_met(goal)
+	dropAbundantItems()
+	countInventory()
+	for k,v in next, goal do
+		log(" item: "..k.." goal  quantity "..v.." in inventory :"..countOf(k))
+		if countOf(k) < v then
+
+			return false
+		end
+	end
+	return true
+
+end
 
 
 

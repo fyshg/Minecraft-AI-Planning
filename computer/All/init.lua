@@ -1,5 +1,6 @@
 
---This class initializes a new turtle
+--This class initializes a new turtle. If you want to resume the session of an existing turtle just make
+--sure to call read_pos() before doing anythin else. Then it should work .
 
 
 function init_turtle(arg)
@@ -22,8 +23,10 @@ function init_turtle(arg)
 	w.close()
 
 	mining = {}
-	mining["pos"] = vector.new(current_pos.x,60,current_pos.z) -- starting mining spot
-	mining["heigth"] = 0
+	mining["pos"] = vector.new(current_pos.x,60,current_pos.z) -- starting mining spot  -- change to layer 5 i guess
+	mining["height"] = 0  -- leave at 0 unless you know what you are doing
+	mining["tunnel_length"] = 5
+	mining["mining_height"] = 8
 	local wm = fs.open("mining.txt", "w")
 	wm.write(textutils.serialize(mining))
 	wm.close()

@@ -1,5 +1,5 @@
 {
-  heigth = 0,
+  height = 0,
   pos = {
     y = 60,
     x = 0,
