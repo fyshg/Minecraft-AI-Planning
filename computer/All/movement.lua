@@ -98,7 +98,7 @@ end
 
 
 
--- does not navigate in the house ... needs to be added later according to needs
+-- does not navigate in the house ... needs to be added later according to specific needs
 
 function navigate(position)   -- must use furthest away first tactic ... 
 
@@ -146,7 +146,7 @@ end
 
 
 
---naively implements navigation going towards a position with prioity x y z ...
+--naively implements navigation going towards a position with priority x y z ...
 -- please use navigate instead unless you know what you are doing 
 function go_towards(position)
 	print("going towards x: "..position.x.." y: "..position.y.." z: "..position.z)

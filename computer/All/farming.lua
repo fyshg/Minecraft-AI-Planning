@@ -146,7 +146,7 @@ end
 
 
 
--- expects a dictionary with neccessary items to mite
+-- expects a dictionary with neccessary items to mine
 -- goal is a table which maps item ids to count
 function mine(goal)
 
@@ -158,7 +158,7 @@ function mine(goal)
 	local mining_height = mining["mining_height"] -- corresponds to 4 tunnels per walk upwards ....
 	mining_spot = vector.new(mining["pos"].x, mining["pos"].y, mining["pos"].z)  -- 60
 
-	local height = mining["height"] --load from file later
+	local height = mining["height"]
 
 	go_towards(mining_spot)
 	while not goal_met(goal) do   --replace with while loop which checks for inventory containing certain items
