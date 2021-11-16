@@ -6,6 +6,10 @@ function getStackSize(name)
 	return 64
 end
 
+function getFuelValue(name)
+
+end
+
 function maxCountToKeep(name)
 	return 128;
 end

@@ -125,3 +125,4 @@ function countOf(itemname)
 	if inv[itemname]==nil then return 0	end
 	return inv[itemname]
 end
+
