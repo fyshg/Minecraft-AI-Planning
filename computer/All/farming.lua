@@ -20,11 +20,10 @@ function gather_wood(quantity)
 	local spiral = textutils.unserialize(h.readAll())
 	h.close() 
 
-	local wood = 0; 
-	while wood < quantity do
-		gather_ring(quantity, spiral)
-		wood = countLogs()
+
+	while not gather_ring(quantity, spiral) do
 	end
+
 	local w = fs.open("gathering.txt", "w")
 	w.write(textutils.serialize(spiral))
 	w.close()
@@ -44,8 +43,16 @@ end
 -- goes mining in a specified spiral until it gets enough wood. returns true if it found the specified quantity of wood.... 
 -- writes progress to the wood file ...
 -- also mines sand when encountering it
+
+-- cahnge to quantity object with key value
 function gather_ring(quantity, spiral)
 
+	if not quantity["log"] == nil then
+		quantity["log"] = 0
+	end
+	if not quantity["sand"] == nil then
+		quantity["sand"] = 0
+	end
 
 	local upward = false
 	
@@ -54,7 +61,8 @@ function gather_ring(quantity, spiral)
 	local spiral_size = 4 + 8*spiral["ring"]
 
 	for prog = spiral["progress"],spiral_size do
-		if f.mod(spiral["progress"], 64) == 0 then   --drops abundant items all 64 steps
+
+		if math.fmod(spiral["progress"], 64) == 0 then   --drops abundant items all 64 steps
 			dropAbundantItems()
 		end
 		if table.pack(turtle.inspectDown())[2].name == "minecraft:sand" then
@@ -96,7 +104,9 @@ function gather_ring(quantity, spiral)
 			end
 			upward = false
 		end
-		if countLogs() >= quantity then
+
+
+		if countLogs() >= quantity["log"]  and countOf("minecraft:sand") >= quantity["sand"]  then
 			spiral["progress"] = prog +1
 			spiral["dir"] = current_dir
 			spiral["pos"] = vector.new(current_pos.x, current_pos.y, current_pos.z) -- doing it like this to obtain a copy
@@ -112,6 +122,7 @@ function gather_ring(quantity, spiral)
 	spiral["pos"].z = current_pos.z
 	return false
 end
+
 
 function is_wood(blockid)	
 	return blockid == "minecraft:oak_log" or blockid == "minecraft:spruce_log" or 
