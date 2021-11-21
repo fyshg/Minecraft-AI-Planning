@@ -1,7 +1,7 @@
 -- This class implements every neccessary movement function and tracks the position of the turtle
 -- Use the here defined methods instead of the turtle api to avoid weird side-effects
 
-
+require("logger")
 
 
 directions = {} --{"NORTH", "EAST", "SOUTH", "WEST"}
@@ -105,7 +105,7 @@ function navigate(position)   -- must use furthest away first tactic ...
 	local offset = position - current_pos
 
 	if in_house(position) and not in_house(current_pos) then
-		print("goal in house and not inside house")
+		log("goal in house and not inside house")
 		--go towards the straight line of the next entrance.
 		if math.abs(offset.x) >= math.abs(offset.y) and math.abs(offset.x) >= math.abs(offset.z) then
 			go_towards(vector.new(current_pos.x, home.y, home.z))	
@@ -118,7 +118,7 @@ function navigate(position)   -- must use furthest away first tactic ...
 		go_towards(position)
 
 	elseif not in_house(position) and not in_house(current_pos) then
-		print("goal not in house and not inside house")
+		log("goal not in house and not inside house")
 		-- walk while avoiding the hose ... 
 		if house_in_the_way(position) then
 			navigate(home)
@@ -127,7 +127,7 @@ function navigate(position)   -- must use furthest away first tactic ...
 			go_towards(position)
 		end
 	elseif not in_house(position) and in_house(current_pos) then
-		print("goal not in house and currently in house")
+		log("goal not in house and currently in house")
 		-- go to the entrance where the offset bigger than the house (5) and 2 for y
 		go_towards(home) --middle to avoid weird collisions
 		if math.abs(offset.x) >= 5 then
@@ -148,8 +148,8 @@ end
 --naively implements navigation going towards a position with priority x y z ...
 -- please use navigate instead unless you know what you are doing 
 function go_towards(position)
-	print("going towards x: "..position.x.." y: "..position.y.." z: "..position.z)
-	print("from"..current_pos.x)
+	log("going towards x: "..position.x.." y: "..position.y.." z: "..position.z)
+	log("from"..current_pos.x)
 	local offset = position - current_pos  --calculates the offset value
 	if offset.x > 0 then
 		turn(directions["EAST"])
@@ -200,7 +200,7 @@ function go_towards(position)
 			end
 		
 	end
-	print("going finished")
+	log("going finished")
 end
 
 
@@ -227,9 +227,7 @@ function house_in_the_way(pos)
 	end
 
 	-- case if turtle would walk x first and then walk in to the house while traversing the z - axis 
-	print("is goal in square")
-	print(in_house(vector.new(pos.x, home.y, pos.z)))
-	print(in_house(vector.new(home.x, home.y, current_pos.z)))
+	
 
 	if  in_house(vector.new(home.x, pos.y, pos.z)) and 
 		in_house(vector.new(home.x, current_pos.y, home.z)) and
@@ -248,7 +246,7 @@ function house_in_the_way(pos)
 end		   
 
 function test()
-	print(current_pos["x"])
+	log(current_pos["x"])
 
 end
 
