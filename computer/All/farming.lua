@@ -27,15 +27,14 @@ function gather_wood(quantity)
 	local w = fs.open("gathering.txt", "w")
 	w.write(textutils.serialize(spiral))
 	w.close()
-	navigate(home)
 end
 
 function kill_tree()
 	move_forward()
-	for i = 1,6 do
+	for _ = 1,6 do
 		move_up()
 	end
-	for i = 1,6 do
+	for _ = 1,6 do
 		move_down()
 	end
 end
@@ -177,45 +176,44 @@ function mine(goal)
 		turn(directions["EAST"])
 		for i = 0,tunnel_length do
 			move_forward()
-			checkForResources()	
+			checkForResources()
 		end
-		 --make row in same field
+		--make row in same field
 		height = height + 2;
-		for i = 1,2 do 
+		for i = 1,2 do
 			move_up()
-		end	
+		end
 		turn(directions["NORTH"])
 		move_forward()
-		
+
 		--else calculate new mining spot 
 		turn(directions["WEST"])
 
 		for i = 0,tunnel_length do
 			move_forward()
-			checkForResources()	
+			checkForResources()
 		end
 
 
 		if height + 4 < mining_height then  --make row in same field
 			height = height + 2;
-			for i = 1,2 do 
+			for i = 1,2 do
 				move_up()
-			end	
+			end
 			turn(directions["NORTH"])
 			move_forward()
-		else 
-			local down = 0; 
-			if height - 7 < 0 then 
+		else
+			local down = 0;
+			if height - 7 < 0 then
 				down = 5
-			else 
-				down = 7 
+			else
+				down = 7
 			end
-			for i = 1,down do 
+			for i = 1,down do
 				move_down()
 			end
 			height = height -down
 		end
-		  print("reached end of while")
 	end
 	
 	mining["pos"] = current_pos
@@ -224,7 +222,7 @@ function mine(goal)
 	w.write(textutils.serialize(mining))
 	w.close()
 		
-	navigate(home)
+
 end
 
 function goal_met(goal)

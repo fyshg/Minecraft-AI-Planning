@@ -1,6 +1,6 @@
 
 --This class initializes a new turtle. If you want to resume the session of an existing turtle just make
---sure to call read_pos() before doing anythin else. Then it should work .
+--sure to call read_pos() before doing anythin else. Then it should work
 
 
 function init_turtle(arg)
