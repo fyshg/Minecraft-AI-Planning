@@ -1,3 +1,4 @@
+require("logger")
 chests={} --contains all information about the count of chests and their content
 totalItemCounts={} -- total item counts over all chests
 itemsWanted={}
@@ -450,3 +451,9 @@ function resetReservations()
 	end
 end
 
+function dropInventory()
+	for k,_ in pairs(itemsWanted) do
+		itemsWanted[k]=nil
+	end
+	storeRest()
+end

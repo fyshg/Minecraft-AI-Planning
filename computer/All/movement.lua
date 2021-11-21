@@ -107,11 +107,11 @@ function navigate(position)   -- must use furthest away first tactic ...
 	if in_house(position) and not in_house(current_pos) then
 		print("goal in house and not inside house")
 		--go towards the straight line of the next entrance.
-		if math.abs(offset.x) >= math.abs(offset.y) and math.abs(offset.x) >= math.abs(offset.z) then 
+		if math.abs(offset.x) >= math.abs(offset.y) and math.abs(offset.x) >= math.abs(offset.z) then
 			go_towards(vector.new(current_pos.x, home.y, home.z))	
-		elseif math.abs(offset.y) >= math.abs(offset.x) and math.abs(offset.y) >= math.abs(offset.z) then 
+		elseif math.abs(offset.y) >= math.abs(offset.x) and math.abs(offset.y) >= math.abs(offset.z) then
 			go_towards(vector.new(home.x, current_pos.y, home.z))	
-		elseif math.abs(offset.z) >= math.abs(offset.x) and math.abs(offset.z) >= math.abs(offset.y) then 
+		elseif math.abs(offset.z) >= math.abs(offset.x) and math.abs(offset.z) >= math.abs(offset.y) then
 			go_towards(vector.new(home.x, home.y, current_pos.z))
 		end
 		go_towards(home)
@@ -139,7 +139,6 @@ function navigate(position)   -- must use furthest away first tactic ...
 		end
 		go_towards(position)
 	end
-
 end
 
 -- expects xyz as vector and then goes to this position
