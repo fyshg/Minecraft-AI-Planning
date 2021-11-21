@@ -1,4 +1,5 @@
 require("movement")
+require("chestStorageSystem")
 -- requirement is, that there is a furnace in the inventory
 function build_furnace()
 
@@ -13,10 +14,32 @@ function build_furnace()
         return
     end
 
+    turtle.digUp()
     select("minecraft:furnace")
     turtle.placeUp()
 end
 
+function build_chest()
+
+    dir =  math.fmod( chests["count"], 4) +1
+    turn(dir)
+    height = math.floor(chests["count"] / 4) + 1
+    for _ = 1, height do
+        move_up()
+    end
+
+    turtle.dig()
+    select("minecraft:chest")
+    turtle.place()
+
+    addChestToData()
+
+    for _ = 1, height do
+        move_down()
+    end
+
+
+end
 
 function select(itemid)
     for i = 1,16 do
@@ -25,5 +48,5 @@ function select(itemid)
             return
         end
     end
-    error("Expected item not in inventory")
+    error("Expected item: ".. itemid.." not in inventory")
 end

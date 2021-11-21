@@ -10,6 +10,8 @@ require("logger")
 function Initiate(args)
     init_turtle(args)
     turn(directions["EAST"])
+    setupChests()
+    writeChestFile()
 end
 
 
@@ -35,18 +37,23 @@ end
 -- Requirement:  Furnace in inventory
 -- Reward: Smelting is now available
 function PlaceFurnace()
+    -- TODO get Item from chest storage if not in inventory
     build_furnace()
     go_towards(home)
     turn(directions["EAST"])
 end
 
-function PlaceChests()
-
-    -- TODO
+-- Requirement: Chest in Inventory
+-- Reward: Storage System yay
+function PlaceChest()
+    -- TODO get Item from chest storage if not in inventory
+    build_chest()
+    go_towards(home)
+    turn(directions["EAST"])
 end
 
 function Craft()
- -- TODO
+ -- TODO get items from chest or inventory and craft desired recipe.
 end
 
 -- Requirement: Furnace placed, Items in Inventory

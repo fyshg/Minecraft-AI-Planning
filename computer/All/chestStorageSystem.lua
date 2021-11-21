@@ -132,7 +132,7 @@ function inventur()
 		suc, dat=turtle.inspect()
 		if suc and dat.name=="minecraft:chest" then
 			addChestToData()
-			for j=1,8 do turtle.suck() end
+			for _=1,8 do turtle.suck() end
 			for j=1,8 do
 				turtle.select(j)
 				d=turtle.getItemDetail()
@@ -282,7 +282,7 @@ function getmissing()
 			gotoChest(i)
 			turtle.select(1)
 			-- take all items
-			for j=1,8 do turtle.suck() end
+			for _=1,8 do turtle.suck() end
 			-- a second counter is needed, as it could happen, that the turtle keeps all items from slot 3, therefore the items from the 4th slot move to the 3rd, the ones from the 5th to the 4th and so on0
 			local ind=1
 			for j=1,8 do
