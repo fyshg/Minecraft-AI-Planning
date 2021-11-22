@@ -1,4 +1,6 @@
 require("logger")
+require("inventory")
+require("generalHelpingFunctions")
 chests={} --contains all information about the count of chests and their content
 totalItemCounts={} -- total item counts over all chests
 itemsWanted={}

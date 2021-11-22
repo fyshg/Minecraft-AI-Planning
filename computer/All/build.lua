@@ -1,7 +1,8 @@
 require("movement")
 require("chestStorageSystem")
--- requirement is, that there is a furnace in the inventory
+-- requirement is, that there is a furnace in the storage system
 function build_furnace()
+
 
     turn(directions["EAST"])
     move_forward()
@@ -18,10 +19,11 @@ function build_furnace()
     select("minecraft:furnace")
     turtle.placeUp()
 end
-
+-- requirement is, that there is a chest in the storage system
 function build_chest()
 
-    dir =  math.fmod( chests["count"], 4) +1
+
+    dir =  ( (chests["count"] % 4) +1) % 4
     turn(dir)
     height = math.floor(chests["count"] / 4) + 1
     for _ = 1, height do

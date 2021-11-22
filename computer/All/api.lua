@@ -34,10 +34,12 @@ function Gather(goal)
 end
 
 
--- Requirement:  Furnace in inventory
+-- Requirement:  Furnace in storage
 -- Reward: Smelting is now available
 function PlaceFurnace()
-    -- TODO get Item from chest storage if not in inventory
+
+    itemsWanted["minecraft:furnace"] = 1
+    getmissing()
     build_furnace()
     go_towards(home)
     turn(directions["EAST"])
@@ -46,7 +48,9 @@ end
 -- Requirement: Chest in Inventory
 -- Reward: Storage System yay
 function PlaceChest()
-    -- TODO get Item from chest storage if not in inventory
+
+    itemsWanted["minecraft:chest"] = 1
+    getmissing()
     build_chest()
     go_towards(home)
     turn(directions["EAST"])
