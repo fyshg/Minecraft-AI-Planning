@@ -56,8 +56,12 @@ function PlaceChest()
     turn(directions["EAST"])
 end
 
-function Craft()
- -- TODO get items from chest or inventory and craft desired recipe.
+
+--Requirement: Items needed for crafting in inventory or chest
+--Reward: Items get crafted
+function Craft(itemname, itemcount)
+    craft(itemname, count, false, false)
+    dropInventory()
 end
 
 -- Requirement: Furnace placed, Items in Inventory
@@ -67,3 +71,5 @@ function Smelt(itemname, itemcount, fuelname, fuelcount)
     go_towards(home)
     turn(directions["EAST"])
 end
+
+
