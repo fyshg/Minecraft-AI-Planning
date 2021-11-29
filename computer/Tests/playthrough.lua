@@ -1,0 +1,6 @@
+require("api")
+
+Initiate()
+
+
+InitiateChests()

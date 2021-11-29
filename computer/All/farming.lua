@@ -46,10 +46,10 @@ end
 -- cahnge to quantity object with key value
 function gather_ring(quantity, spiral)
 
-	if not quantity["log"] == nil then
+	if  quantity["log"] == nil then
 		quantity["log"] = 0
 	end
-	if not quantity["sand"] == nil then
+	if  quantity["sand"] == nil then
 		quantity["sand"] = 0
 	end
 
@@ -104,7 +104,7 @@ function gather_ring(quantity, spiral)
 			upward = false
 		end
 
-
+		--log(countLogs().." log "..quantity["log"].." sandcount "..countOf("minecraft:sand").." sand "..quantity["sand"])
 		if countLogs() >= quantity["log"]  and countOf("minecraft:sand") >= quantity["sand"]  then
 			spiral["progress"] = prog +1
 			spiral["dir"] = current_dir

@@ -1,3 +1,4 @@
+require("recipes")
 function itemsToCraftAvailable(itemname, count, recursion, useExistingItems, withCurrentReservations)
     if withCurrentReservations== nil then withCurrentReservations=false end
     if recursion==nil then recursion=true end
