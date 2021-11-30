@@ -171,12 +171,18 @@ function mine(goal)
 	local height = mining["height"]
 
 	go_towards(mining_spot)
-	while not goal_met(goal) do   --replace with while loop which checks for inventory containing certain items
 
+	while not goal_met(goal) do   --replace with while loop which checks for inventory containing certain items
+		local i = 0
 		turn(directions["EAST"])
 		for i = 0,tunnel_length do
 			move_forward()
 			checkForResources()
+			i = i+1
+
+			if i % 64 == 0 then
+				dropAbundantItems()
+			end
 		end
 		--make row in same field
 		height = height + 2;
@@ -192,6 +198,11 @@ function mine(goal)
 		for i = 0,tunnel_length do
 			move_forward()
 			checkForResources()
+
+			i = i+1
+			if i % 64 == 0 then
+				dropAbundantItems()
+			end
 		end
 
 

@@ -1,3 +1,4 @@
+require("itemstacksizesAndMaxCounts")
 inv={} --inv[itemname], contains name, count
 items={} --array of itemdetails
 slot={} --slot[itemname] tells in which slot <itemname> is
