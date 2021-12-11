@@ -138,6 +138,11 @@ function setRecipe(id,c)
 		mult=1
 		recalculateItemsNeeded()
 		return true;
+	elseif (id=="minecraft:stick") then
+		rec = {{nil,nil,nil},{nil,nil,"minecraft:oak_planks"},{nil,nil,"minecraft:oak_planks"}}
+		maxCount=8 --? idk what this means
+		recalculateItemsNeeded()
+		return true;
  	end
 	log("Recipe not found!")
 	return false;

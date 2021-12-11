@@ -19,15 +19,16 @@ function InitiateChests()
     goal = {}
     goal["log"] = 6
     gather_wood(goal)
+
+    navigate(home)
     for i=1,16 do
         if turtle.getItemDetail(i) ~= nil and not is_wood(turtle.getItemDetail(i).name) then
             turtle.select(i)
             turtle.drop()
         end
     end
-    navigate(home)
 
-    craft("minecraft:oak_planks", 6)
+    craft("minecraft:oak_planks", 6) -- Fails if more than 6 logs are in inventory
     craft("minecraft:chest", 3)
 
     for _ = 1,3 do
@@ -82,7 +83,7 @@ end
 --Requirement: Items needed for crafting in inventory or chest
 --Reward: Items get crafted
 function Craft(itemname, itemcount)
-    craft(itemname, count, false, false)
+    craft(itemname, itemcount, false, false)
     dropInventory()
 end
 
