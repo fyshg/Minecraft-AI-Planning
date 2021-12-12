@@ -26,7 +26,7 @@ function checkInventoryMatchesRecipe()
 			end
 		end
 	end
-	for i in pairs(inv) do
+	for i,_ in pairs(inv) do
 		if inv[i]~=0
 		then
 			log("Too many or not enough items!")
@@ -45,13 +45,14 @@ end
 
 function arrangeInventoryToRecipe()
 	countInventory()
+	log("count: "..count)
 	for i=1,16 do
 		if items[i]~=nil then
 			turtle.select(i)
 			for y=1,3 do
 				for x=1,3 do
 					if turtle.getItemDetail()~=nil and rec[y][x]==turtle.getItemDetail().name then
-						turtle.transferTo(craftIndexToInvIndex(y,x),count)
+						turtle.transferTo(craftIndexToInvIndex(y,x),count/mult)
 					end
 				end
 			end
@@ -139,8 +140,9 @@ function setRecipe(id,c)
 		recalculateItemsNeeded()
 		return true;
 	elseif (id=="minecraft:stick") then
-		rec = {{nil,nil,nil},{nil,nil,"minecraft:oak_planks"},{nil,nil,"minecraft:oak_planks"}}
-		maxCount=8 --? idk what this means
+		rec = {{nil,"minecraft:oak_planks",nil},{nil,"minecraft:oak_planks", nil},{nil,nil,nil}}
+		maxCount=64 --? idk what this means
+		mult=4
 		recalculateItemsNeeded()
 		return true;
  	end
@@ -149,7 +151,7 @@ function setRecipe(id,c)
 end 
 
 function recalculateItemsNeeded()
-	for i in pairs(itemsNeeded) do
+	for i,_ in pairs(itemsNeeded) do
 		itemsNeeded[i]=nil
 	end
 	local c=math.ceil(count/mult)

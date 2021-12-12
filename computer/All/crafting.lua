@@ -26,10 +26,10 @@ function itemsToCraftAvailableHelper(itemname, count, recursion, notFirstStep)
                 return false
             end
             local itemsWanted={}
-            for i in pairs(itemsNeeded) do
+            for i,_ in pairs(itemsNeeded) do
                 itemsWanted[i]=itemsNeeded[i]
             end
-            for i in pairs(itemsWanted) do
+            for i,_ in pairs(itemsWanted) do
                 if recursion then
                     if not itemsToCraftAvailableHelper(i,itemsWanted[i],recursion,true) then
                         log(i.." not available!")

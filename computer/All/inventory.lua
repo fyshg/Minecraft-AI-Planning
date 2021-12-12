@@ -4,13 +4,13 @@ items={} --array of itemdetails
 slot={} --slot[itemname] tells in which slot <itemname> is
 
 function resetInv()
-	for i in pairs(inv) do
+	for i,_ in pairs(inv) do
 		inv[i]=nil
 	end
-	for i in pairs(slot) do
+	for i,_ in pairs(slot) do
 		slot[i]=nil
 	end
-	for i in pairs(items) do
+	for i,_ in pairs(items) do
 		items[i]=nil
 	end
 end
