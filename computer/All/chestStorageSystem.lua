@@ -247,6 +247,7 @@ function getmissing()
 	sortInventory()
 	local tmp={} -- List of items needed for crafting, local copy
 	for i,_ in pairs(itemsWanted) do
+		log("Item Wanted: "..i.." count "..itemsWanted[i])
 		tmp[i]=itemsWanted[i]
 		if inv[i]~=nil then
 			tmp[i]=tmp[i]-inv[i]
@@ -324,9 +325,7 @@ function getmissing()
 		end
 	end
 	gotoStart()
-	log("testestest1")
 	writeChestFile()
-	log("testestest2")
 end
 
 function addItemToChest(chest,name,count)

@@ -1,17 +1,20 @@
 require("movement")
 require("chestStorageSystem")
+require("inventory")
 
 function smelt(itemname, itemcount, fuelname, fuelcount)
+    storeRest()
     smeltingTime=10
 
     for i,_ in pairs(itemsWanted) do
         itemsWanted[i]=nil
     end
+
     itemsWanted[itemname]=itemcount;
     if (fuelcount>0) then
         itemsWanted[fuelname]=fuelcount;
     end
-    storeRest() 
+
     getmissing()
 
 
@@ -23,14 +26,17 @@ function smelt(itemname, itemcount, fuelname, fuelcount)
     turn(directions["WEST"])
 
     if (fuelcount>0) then
-        turtle.select(inventory.slog(fuelname))
+        turtle.select(slot[fuelname])
         turtle.drop()
     end
     move_up()
     move_forward()
-    turtle.select(inventory.slog(itemname))
+    countInventory()
+    turtle.select(slot[itemname])
     turtle.dropDown()
-    move_back()
+    turn(directions["EAST"])
+    move_forward()
+    turn(directions["WEST"])
     move_down()
     move_down()
     move_forward()

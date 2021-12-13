@@ -145,6 +145,12 @@ function setRecipe(id,c)
 		mult=4
 		recalculateItemsNeeded()
 		return true;
+	elseif (id=="minecraft:furnace") then
+		rec = {{"minecraft:cobblestone","minecraft:cobblestone","minecraft:cobblestone"},{"minecraft:cobblestone",nil, "minecraft:cobblestone"},{"minecraft:cobblestone","minecraft:cobblestone","minecraft:cobblestone"}}
+		maxCount=64
+		mult=1
+		recalculateItemsNeeded()
+		return true;
  	end
 	log("Recipe not found!")
 	return false;

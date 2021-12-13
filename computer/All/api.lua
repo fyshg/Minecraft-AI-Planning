@@ -93,6 +93,7 @@ function Smelt(itemname, itemcount, fuelname, fuelcount)
     smelt(itemname, itemcount, fuelname, fuelcount)
     go_towards(home)
     turn(directions["EAST"])
+    dropInventory()
 end
 
 
