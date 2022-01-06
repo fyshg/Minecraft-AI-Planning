@@ -28,7 +28,7 @@ function InitiateChests()
         end
     end
 
-    craft("minecraft:oak_planks", 6) -- Fails if more than 6 logs are in inventory
+    craft("minecraft:oak_planks", 24) -- Fails if more than 6 logs are in inventory
     craft("minecraft:chest", 3)
 
     for _ = 1,3 do

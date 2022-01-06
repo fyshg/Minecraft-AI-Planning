@@ -1,6 +1,6 @@
 require("api")
 
-
+Initiate()
 
 InitiateChests()
 
