@@ -13,7 +13,7 @@ target["minecraft:diamond"]=3
 Mine(target)
 
 
-Craft("minecraft:oak_planks",4)
+Craft("merged:planks",4)
 Craft("minecraft:stick", 4)
 Craft("minecraft:diamond_pickaxe",1)
 

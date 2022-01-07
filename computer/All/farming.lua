@@ -15,13 +15,14 @@
 --
 
 
-function gather_wood(quantity)
+function gather_wood(quantity, startup)
+	startup = startup or false
 	local h = fs.open("./gathering.txt", "r")
 	local spiral = textutils.unserialize(h.readAll())
 	h.close() 
 
 
-	while not gather_ring(quantity, spiral) do
+	while not gather_ring(quantity, spiral, startup) do
 	end
 
 	local w = fs.open("gathering.txt", "w")
@@ -31,10 +32,21 @@ end
 
 function kill_tree()
 	move_forward()
-	for _ = 1,6 do
+
+	local elevation = 0
+	while is_wood(table.pack(turtle.inspectDown())[2].name) do
+		move_down()
+		elevation = elevation +1
+	end
+	for _ = 0,elevation do
 		move_up()
 	end
-	for _ = 1,6 do
+	elevation = 0
+	while is_wood(table.pack(turtle.inspectUp())[2].name) do
+		move_up()
+		elevation = elevation +1
+	end
+	for _ = 0,elevation do
 		move_down()
 	end
 end
@@ -44,7 +56,7 @@ end
 -- also mines sand when encountering it
 
 -- cahnge to quantity object with key value
-function gather_ring(quantity, spiral)
+function gather_ring(quantity, spiral, startup)
 
 	if  quantity["log"] == nil then
 		quantity["log"] = 0
@@ -54,7 +66,7 @@ function gather_ring(quantity, spiral)
 	end
 
 	local upward = false
-	
+
 	go_towards(vector.new(spiral["pos"].x, spiral["pos"].y,spiral["pos"].z))
 	turn(spiral["dir"])
 	local spiral_size = 4 + 8*spiral["ring"]
@@ -70,14 +82,16 @@ function gather_ring(quantity, spiral)
 		-- turn turtle left if on one of the 4 edges 
 		if math.fmod(prog, (spiral_size / 4)) == 2 + spiral["ring"]  then
 			turn_left()
-		end 
+		end
 
 
 		--check for tree  and kill it
 
 		if is_wood(table.pack(turtle.inspect())[2].name) then
 			kill_tree()
-		else 
+		elseif table.pack(turtle.inspect())[2].name =="minecraft:grass" or table.pack(turtle.inspect())[2].name =="minecraft:tall_grass" then
+			move_forward()
+		else
 			-- walk up and down until on a surface and then walk forward
 			local tree = false
 			while not ((turtle.detectDown() and not turtle.detect()) or (upward and not turtle.detect())) do
@@ -105,7 +119,12 @@ function gather_ring(quantity, spiral)
 		end
 
 		--log(countLogs().." log "..quantity["log"].." sandcount "..countOf("minecraft:sand").." sand "..quantity["sand"])
-		if countLogs() >= quantity["log"]  and countOf("minecraft:sand") >= quantity["sand"]  then
+		if not startup and countLogs() >= quantity["log"]  and countOf("minecraft:sand") >= quantity["sand"]  then
+			spiral["progress"] = prog +1
+			spiral["dir"] = current_dir
+			spiral["pos"] = vector.new(current_pos.x, current_pos.y, current_pos.z) -- doing it like this to obtain a copy
+			return true
+		elseif startup and has_starting_logs()  then
 			spiral["progress"] = prog +1
 			spiral["dir"] = current_dir
 			spiral["pos"] = vector.new(current_pos.x, current_pos.y, current_pos.z) -- doing it like this to obtain a copy
@@ -120,7 +139,21 @@ function gather_ring(quantity, spiral)
 	spiral["pos"].y = current_pos.y
 	spiral["pos"].z = current_pos.z
 	return false
+
+
+
 end
+
+function has_starting_logs()
+	countInventory()
+	for _,wood in pairs(woods) do
+		log("wood: "..wood.." countOf: "..countOf(wood))
+		if countOf(wood) >= 6 then
+			return true
+		end
+	end
+	return false
+end         --returns nil if no wood is present with more than 6 else "minecraft:woodtype"
 
 
 function is_wood(blockid)	

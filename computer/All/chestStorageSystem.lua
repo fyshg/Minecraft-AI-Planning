@@ -8,6 +8,7 @@ itemsWanted={} -- itemsWanted[itemname]=count
 reserved ={} --contains items reserved for crafting and thus not available
 function writeChestFile()
 	--saves the chests table to file
+	log(" Writing Chest File ")
 	local h=fs.open("chests.michi","w")
 	h.write(textutils.serialize(chests))
 	h.close()
@@ -325,6 +326,7 @@ function getmissing()
 		end
 	end
 	gotoStart()
+	print_table(chests)
 	writeChestFile()
 end
 

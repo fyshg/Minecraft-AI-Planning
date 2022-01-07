@@ -17,7 +17,7 @@ function log(text, name, silent)
 
 
     if type(text)=="table" then
-        for i in pairs(text) do
+        for _,i in pairs(text) do
             log(text[i],i, silent)
         end
         return

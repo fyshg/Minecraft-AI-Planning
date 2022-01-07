@@ -18,25 +18,35 @@ end
 function InitiateChests()
     goal = {}
     goal["log"] = 6
-    gather_wood(goal)
+    gather_wood(goal, true)
 
     navigate(home)
-    for i=1,16 do
-        if turtle.getItemDetail(i) ~= nil and not is_wood(turtle.getItemDetail(i).name) then
-            turtle.select(i)
-            turtle.drop()
+    for i = 1, 16 do
+        if turtle.getItemDetail(i) ~= nil then
+            local name = turtle.getItemDetail(i).name
+            local quantity = turtle.getItemDetail(i).count
+
+            local has_wood = false
+            if not is_wood(name) or has_wood or (is_wood(name) and quantity < 6 ) then
+                turtle.select(i)
+                turtle.drop()
+            elseif is_wood(name) and quantity >= 6 and not has_wood then
+                --drop till 6quantity
+                turtle.select(i)
+                turtle.drop(quantity - 6)
+                has_wood = true
+            end
         end
     end
 
-    craft("minecraft:oak_planks", 24) -- Fails if more than 6 logs are in inventory
-    craft("minecraft:chest", 3)
+    craft("minecraft:startPlanks", 24) -- Fails if more than 6 logs are in inventory
+    craft("minecraft:startChest", 3)
 
-    for _ = 1,3 do
+    for _ = 1, 3 do
         PlaceChest()
     end
 
 end
-
 
 function Mine(goal)
     -- drop inventory in chests before and after
