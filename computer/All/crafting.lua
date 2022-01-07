@@ -50,22 +50,25 @@ function itemsToCraftAvailableHelper(itemname, count, recursion, notFirstStep)
 end
 ]]--
 
-function craft(itemname, count, checkForAvailability, alsoGetAlreadyExistingItems)
-    log("Crafting "..itemname.." x "..count.." directly")
+function craft(recipeID, count, checkForAvailability, alsoGetAlreadyExistingItems)
+    setRecipe(recipeID, count)
+    log("Crafting "..recipeID.." x "..count.." directly")
     checkForAvailability=checkForAvailability or false
     if checkForAvailability then
+        log("Warning: checkForAvailability is set true in craft: shouldn't be so!")
         if not itemsToCraftAvailable(itemname,count,false, alsoGetAlreadyExistingItems) then
             return false
         end
     end
     if (alsoGetAlreadyExistingItems) then
-        max=maximumItemCountAvailable(itemname)
+        log("Warning: alsoGetAlreadyExistingItems is set true in craft: shouldn't be so!")
+        max=maximumItemCountAvailable(recipeID)
         if max>=count then
             log("Items already available in Chests/Inventory!")
-            getFromChests(itemname,count)
+            getFromChests(recipeID,count)
         else
             craft(itemname,count-max,false,false)
-            getFromChests(itemname,max)
+            getFromChests(recipeID,max)
         end
         return true
     end
@@ -74,14 +77,16 @@ function craft(itemname, count, checkForAvailability, alsoGetAlreadyExistingItem
     -- if too many items need to be crafted, crafting needs to be repeated multiple times
     for i=1,math.floor(count/maxCount) do
         log("Getting a full batch!")
-        getItemsFor(itemname,maxCount)
+        getItemsFor(recipeID,maxCount)
         arrangeInventoryToRecipe()
         turtle.craft(count)
     end
-    log("Getting items for "..itemname.." x "..(count%maxCount))
-    getItemsFor(itemname,count%maxCount)
-    arrangeInventoryToRecipe()
-    turtle.craft(count%maxCount)
+    if count%maxCount>0 then
+        log("Getting items for "..recipeID.." x "..(count%maxCount))
+        getItemsFor(recipeID,count%maxCount)
+        arrangeInventoryToRecipe()
+        turtle.craft(count%maxCount)
+    end
     return true
 end
 

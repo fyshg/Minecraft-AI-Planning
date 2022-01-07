@@ -2,7 +2,7 @@ rec={6,6,6}
 count=1
 mult=1
 woods={"minecraft:oak_log","minecraft:spruce_log","minecraft:birch_log","minecraft:jungle_log","minecraft:acacia_log","minecraft:dark_oak_log","minecraft:crimson_log","minecraft:warped_log"}
-planks={"minecraft:oak_plank","minecraft:spruce_plank","minecraft:birch_plank","minecraft:jungle_plank","minecraft:acacia_plank","minecraft:dark_oak_plank","minecraft:crimson_plank","minecraft:warped_plank"}
+planks={"minecraft:oak_planks","minecraft:spruce_planks","minecraft:birch_planks","minecraft:jungle_planks","minecraft:acacia_planks","minecraft:dark_oak_planks","minecraft:crimson_planks","minecraft:warped_planks"}
 name=""
 itemsNeeded={} --itemsNeeded[<name>]=count of item <name> needed
 maxCount=64 -- how many items of the current recipe can maximally be crafted (for example: 16 diamond pickaxes, as there is not space for 17 in turtle inventory)
@@ -15,13 +15,17 @@ end
 function arrangeInventoryToRecipe()
 	--Arranges the inventory to the shape of the recipe
 	countInventory()
-	log("Count: "..count)
+	log("Arranging Inventory to craft "..count.." times.")
+	verbose=true
 	for i=1,16 do
 		if items[i]~=nil then
 			turtle.select(i)
 			for y=1,3 do
 				for x=1,3 do
 					if turtle.getItemDetail()~=nil and has_value(rec[y][x],turtle.getItemDetail().name) then
+						if verbose then
+							log("Moving "..(count/mult).." items from slot"..i.." to slot "..craftIndexToInvIndex(y,x))
+						end
 						turtle.transferTo(craftIndexToInvIndex(y,x),count/mult)
 					end
 				end
