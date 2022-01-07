@@ -370,7 +370,25 @@ function getItemsFor( itemname, count )
 		itemsWanted[i]=nil
 	end
 	for i,_ in pairs(itemsNeeded) do
-		itemsWanted[i]=itemsNeeded[i]
+		if i=="woods" then
+			local tmp=itemsNeeded[i]
+			for _,k in pairs(woods) do
+				if (tmp>0 and totalItemCounts[k]~=nil and totalItemCounts[k]>0) then
+					itemsWanted[k]=math.min(totalItemCounts[k],tmp)
+					tmp=tmp-itemsWanted[k]
+				end
+			end
+		elseif i=="planks" then
+			local tmp=itemsNeeded[i]
+			for _,k in pairs(planks) do
+				if (tmp>0 and totalItemCounts[k]~=nil and totalItemCounts[k]>0) then
+					itemsWanted[k]=math.min(totalItemCounts[k],tmp)
+					tmp=tmp-itemsWanted[k]
+				end
+			end
+		else
+			itemsWanted[i]=itemsNeeded[i]
+		end
 	end
 	--store the rest in chests
 	storeRest()

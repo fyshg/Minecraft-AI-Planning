@@ -1,5 +1,5 @@
 require("itemstacksizesAndMaxCounts")
-inv={} --inv[itemname], contains name, count
+inv={} --inv[itemname], contains count
 items={} --array of itemdetails
 slot={} --slot[itemname] tells in which slot <itemname> is
 

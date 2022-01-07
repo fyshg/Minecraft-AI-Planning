@@ -1,4 +1,6 @@
 require("recipes")
+
+--[[
 function itemsToCraftAvailable(itemname, count, recursion, useExistingItems, withCurrentReservations)
     if withCurrentReservations== nil then withCurrentReservations=false end
     if recursion==nil then recursion=true end
@@ -46,6 +48,7 @@ function itemsToCraftAvailableHelper(itemname, count, recursion, notFirstStep)
     log(itemname.." available!")
     return true
 end
+]]--
 
 function craft(itemname, count, checkForAvailability, alsoGetAlreadyExistingItems)
     log("Crafting "..itemname.." x "..count.." directly")
@@ -67,10 +70,12 @@ function craft(itemname, count, checkForAvailability, alsoGetAlreadyExistingItem
         return true
     end
     log("Getting items!")
+    log("Crafting "..count.." items, maximal count of items to be crafted in one Batch is "..maxCount)
     -- if too many items need to be crafted, crafting needs to be repeated multiple times
     for i=1,math.floor(count/maxCount) do
         log("Getting a full batch!")
         getItemsFor(itemname,maxCount)
+        arrangeInventoryToRecipe()
         turtle.craft(count)
     end
     log("Getting items for "..itemname.." x "..(count%maxCount))
@@ -80,7 +85,7 @@ function craft(itemname, count, checkForAvailability, alsoGetAlreadyExistingItem
     return true
 end
 
-function craftRecursively(itemname, count, checkForAvailability, alsoGetAlreadyExistingItems)
+--[[function craftRecursively(itemname, count, checkForAvailability, alsoGetAlreadyExistingItems)
     checkForAvailability=checkForAvailability or false
     if checkForAvailability then
         if not itemsToCraftAvailable(itemname,count,true, alsoGetAlreadyExistingItems) then
@@ -138,3 +143,4 @@ function craftRecursively(itemname, count, checkForAvailability, alsoGetAlreadyE
     end
     return true
 end
+]]--
