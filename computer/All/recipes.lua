@@ -62,9 +62,17 @@ function setRecipe(id,c)
 		mult=4
 		recalculateItemsNeeded()
 		return true;
-	elseif (id=="minecraft:oak_planks")
+	elseif (id=="minecraft:startChest")
 	then
-		rec={ { nil,nil,nil},{nil,{"minecraft:oak_log"},nil },{nil,nil,nil}}
+		rec={{planks,planks,planks},{planks,nil,planks},{planks,planks,planks}}
+		maxCount=3
+		--count=math.min(count,maxCount)
+		mult=1
+		recalculateItemsNeeded()
+		return true;
+	elseif (id=="minecraft:startPlanks")
+	then
+		rec={ { nil,nil,nil},{nil,wood,nil },{nil,nil,nil}}
 		maxCount=256
 		--count=math.min(count,maxCount)
 		mult=4

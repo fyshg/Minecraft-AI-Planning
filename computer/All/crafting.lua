@@ -79,7 +79,7 @@ function craft(recipeID, count, checkForAvailability, alsoGetAlreadyExistingItem
         log("Getting a full batch!")
         getItemsFor(recipeID,maxCount)
         arrangeInventoryToRecipe()
-        turtle.craft(count)
+        turtle.craft(maxCount)
     end
     if count%maxCount>0 then
         log("Getting items for "..recipeID.." x "..(count%maxCount))
