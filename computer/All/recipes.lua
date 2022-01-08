@@ -102,9 +102,19 @@ function setRecipe(id,c)
 		mult=16
 		recalculateItemsNeeded()
 		return true;
-	elseif (id=="computercraft:turtle_normal")
+	elseif (id=="computercraft:turtle_mining")
 	then
-		rec={ { {"minecraft:stone"},{"minecraft:stone"},{"minecraft:stone"}},{{"minecraft:stone"},{"minecraft:redstone"},{"minecraft:stone"} },{{"minecraft:stone"},{"minecraft:glass_pane"},{"minecraft:stone"}}}
+		rec={ { nil, nil, nil},{{"minecraft:diamond_pickaxe"},{"computercraft:turtle_normal"},nil },{nil, nil, nil}}
+
+		maxCount=8
+		--count=math.min(count,maxCount)
+		mult=1
+		recalculateItemsNeeded()
+		return true;
+	elseif (id=="computercraft:turtle_mining_crafty")
+	then
+		rec={ { nil, nil, nil},{{"minecraft:crafting_table"},{"computercraft:turtle_mining"},nil },{nil, nil, nil}}
+
 		maxCount=8
 		--count=math.min(count,maxCount)
 		mult=1
@@ -119,6 +129,14 @@ function setRecipe(id,c)
 	elseif (id=="minecraft:furnace") then
 		rec = {{{"minecraft:cobblestone"},{"minecraft:cobblestone"},{"minecraft:cobblestone"}},{{"minecraft:cobblestone"},nil,{"minecraft:cobblestone"}},{{"minecraft:cobblestone"},{"minecraft:cobblestone"},{"minecraft:cobblestone"}}}
 		maxCount=64
+		mult=1
+		recalculateItemsNeeded()
+		return true;
+	elseif (id=="minecraft:crafting_bench")
+	then
+		rec={{nil, nil, nil},{planks,planks,nil},{planks,planks,nil}}
+		maxCount=64
+		--count=math.min(count,maxCount)
 		mult=1
 		recalculateItemsNeeded()
 		return true;

@@ -319,7 +319,7 @@ function getmissing()
 				end
 			end
 			for j=ind,chests[i].stackCount do
-				chests[i][j]=nil
+				chests[i].items[j]=nil
 			end
 			chests[i].stackCount=ind-1
 			sortInventory()
@@ -364,6 +364,7 @@ end
 
 function getItemsFor( itemname, count )
 	log("Getting items from chests: for "..itemname.." x "..count)
+	sumInventoryAndAllChests()
 	count=count or 1
 	setRecipe(itemname, count)
 	countInventory()

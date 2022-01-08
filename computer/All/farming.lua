@@ -67,7 +67,7 @@ function gather_ring(quantity, spiral, startup)
 
 	local upward = false
 
-	go_towards(vector.new(spiral["pos"].x, spiral["pos"].y,spiral["pos"].z))
+	navigate(vector.new(spiral["pos"].x, spiral["pos"].y,spiral["pos"].z))
 	turn(spiral["dir"])
 	local spiral_size = 4 + 8*spiral["ring"]
 
@@ -76,8 +76,13 @@ function gather_ring(quantity, spiral, startup)
 		if math.fmod(spiral["progress"], 64) == 0 then   --drops abundant items all 64 steps
 			dropAbundantItems()
 		end
-		if table.pack(turtle.inspectDown())[2].name == "minecraft:sand" then
-			turtle.digDown()
+		local ind = 0;
+		while table.pack(turtle.inspectDown())[2].name == "minecraft:sand" do
+			move_down()
+		end
+
+		for _=0, ind do
+			move_up()
 		end
 		-- turn turtle left if on one of the 4 edges 
 		if math.fmod(prog, (spiral_size / 4)) == 2 + spiral["ring"]  then
