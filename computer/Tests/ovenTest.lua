@@ -3,8 +3,8 @@ require("init")
 -- turtle needs oven and coal and iron in invenotry for this test
 Initiate()
 inventur()
-Craft("minecraft:furnace",1)
-
+--Craft("minecraft:furnace",1)
+turn(directions["WESTTe"])
 -- gets us enough time to put oven in storage system
 
 

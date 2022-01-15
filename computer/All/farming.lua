@@ -38,7 +38,7 @@ function kill_tree()
 		move_down()
 		elevation = elevation +1
 	end
-	for _ = 0,elevation do
+	for _ = 1,elevation do
 		move_up()
 	end
 	elevation = 0
@@ -46,7 +46,7 @@ function kill_tree()
 		move_up()
 		elevation = elevation +1
 	end
-	for _ = 0,elevation do
+	for _ = 1,elevation do
 		move_down()
 	end
 end
@@ -79,9 +79,10 @@ function gather_ring(quantity, spiral, startup)
 		local ind = 0;
 		while table.pack(turtle.inspectDown())[2].name == "minecraft:sand" do
 			move_down()
+			ind = ind +1
 		end
 
-		for _=0, ind do
+		for _=1, ind do
 			move_up()
 		end
 		-- turn turtle left if on one of the 4 edges 

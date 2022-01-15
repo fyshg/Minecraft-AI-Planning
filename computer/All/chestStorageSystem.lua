@@ -280,7 +280,8 @@ function getmissing()
 	end
 
 --get the items
-	for i =  1,chests.count do
+
+	for i =  1,chests.count  do
 		--if a searched item is in chest i go there
 		if toGet[i]~=nil then
 			log("Getting from chest "..i)

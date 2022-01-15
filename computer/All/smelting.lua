@@ -25,6 +25,7 @@ function smelt(itemname, itemcount, fuelname, fuelcount)
     move_up()
     turn(directions["WEST"])
 
+    countInventory()
     if (fuelcount>0) then
         turtle.select(slot[fuelname])
         turtle.drop()

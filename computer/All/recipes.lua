@@ -122,7 +122,7 @@ function setRecipe(id,c)
 		return true;
 	elseif (id=="minecraft:stick") then
 		rec = {{nil,planks,nil},{nil,planks, nil},{nil,nil,nil}}
-		maxCount=1
+		maxCount=4
 		mult=4
 		recalculateItemsNeeded()
 		return true;
