@@ -1,7 +1,10 @@
 require("api")
 
+
 Initiate()
 inventur()
+print_table(chests)
+--[[
 Craft("merged:planks",16)
 Craft("minecraft:stick", 4)
 Craft("minecraft:diamond_pickaxe",1)
@@ -23,7 +26,9 @@ Craft("computercraft:turtle_normal",1)
 
 Craft("minecraft:stick", 4)
 Craft("minecraft:diamond_pickaxe",1)
-Craft("computercraft:turtle_mining",1)
 
-Craft("minecraft:crafting_bench",1)
+--]]
 Craft("computercraft:turtle_mining_crafty",1)
+
+--Craft("minecraft:crafting_bench",1)
+--Craft("computercraft:turtle_mining_crafty",1)

@@ -113,7 +113,7 @@ function setRecipe(id,c)
 		return true;
 	elseif (id=="computercraft:turtle_mining_crafty")
 	then
-		rec={ { nil, nil, nil},{{"minecraft:crafting_table"},{"computercraft:turtle_mining"},nil },{nil, nil, nil}}
+		rec={ { nil, nil, nil},{nil ,{"computercraft:turtle_normal"},{"minecraft:crafting_table"} },{nil, nil, nil}}
 
 		maxCount=8
 		--count=math.min(count,maxCount)

@@ -52,6 +52,10 @@ end
 
 function craft(recipeID, count, checkForAvailability, alsoGetAlreadyExistingItems)
     setRecipe(recipeID, count)
+    if recipeID =="computercraft:turtle_mining_crafty" then
+            craftTurtle(recipeID, count)
+        return true
+    end
     log("Crafting "..recipeID.." x "..count.." directly")
     checkForAvailability=checkForAvailability or false
     if checkForAvailability then
@@ -88,6 +92,42 @@ function craft(recipeID, count, checkForAvailability, alsoGetAlreadyExistingItem
         turtle.craft(count%maxCount)
     end
     return true
+end
+-- crafts exactly one crafty mining turtle
+function craftTurtle(recipeID, count)
+    sumInventoryAndAllChests()
+    for i,_ in pairs(itemsWanted) do
+        itemsWanted[i]=nil
+    end
+    itemsWanted["minecraft:diamond_pickaxe"]=1
+    itemsWanted["computercraft:turtle_normal"]= 1
+    getmissing()
+    storeRest()
+
+    setRecipe("computercraft:turtle_mining",1)
+    arrangeInventoryToRecipe()
+    turtle.craft()
+
+    countInventory()
+    turtle.select(slot["computercraft:turtle_normal"])
+    turtle.transferTo(13)
+
+    sumInventoryAndAllChests()
+    for i,_ in pairs(itemsWanted) do
+        itemsWanted[i]=nil
+    end
+
+    itemsWanted["minecraft:crafting_table"]=1
+    getmissing()
+    setRecipe("computercraft:turtle_mining_crafty",1)
+    arrangeInventoryToRecipe()
+    turtle.craft()
+
+
+end
+
+function swap(this, other)
+
 end
 
 --[[function craftRecursively(itemname, count, checkForAvailability, alsoGetAlreadyExistingItems)
