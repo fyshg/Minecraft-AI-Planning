@@ -48,13 +48,18 @@ function InitiateChests()
 
 end
 
-function Mine(goal)
+function Mine(item, quantity)
     -- drop inventory in chests before and after
-    dropInventory()
-    mine(goal)
-    navigate(home)
-    turn(directions["EAST"])
-    dropInventory()
+    if not checkMined(item, quantity) then
+        goal[item]= quantity
+        dropInventory()
+        mine(goal)
+        navigate(home)
+        turn(directions["EAST"])
+        saveExtraMined()
+        dropInventory(item, quantity)
+    end
+
 end
 
 function Gather(goal)

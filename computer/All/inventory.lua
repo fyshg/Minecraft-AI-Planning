@@ -3,6 +3,8 @@ inv={} --inv[itemname], contains count
 items={} --array of itemdetails
 slot={} --slot[itemname] tells in which slot <itemname> is
 
+mined = {}
+
 function resetInv()
 	for i,_ in pairs(inv) do
 		inv[i]=nil
@@ -127,3 +129,34 @@ function countOf(itemname)
 	return inv[itemname]
 end
 
+function saveExtraMined(item, quantity)
+	done = false
+    countInventory()
+    dropAbundantItems()
+	for i = 1,16 do
+		name = turtle.getItemDetail(i).name
+		count = turtle.getItemDetail(i).count
+		if name == item and count >= quantity and not done then
+			addToStored(name, quantity - count )
+			done = true
+		else
+			addToStored(name, count)
+		end
+	end
+end
+
+function addToStored(item, quantity)
+	if stored[item] == nil then
+		stored[item] = quantity
+	else
+		stored[item] = stored[item] + quantity
+	end
+end
+
+function checkMined(item, quantity)
+	if Mined[item] ~= nil and Mined[item] >= quantity then
+		Mined[item] = Mined[item] - quantity
+		return true
+	end
+	return false
+end
