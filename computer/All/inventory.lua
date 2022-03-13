@@ -134,28 +134,30 @@ function saveExtraMined(item, quantity)
     countInventory()
     dropAbundantItems()
 	for i = 1,16 do
-		name = turtle.getItemDetail(i).name
-		count = turtle.getItemDetail(i).count
-		if name == item and count >= quantity and not done then
-			addToStored(name, quantity - count )
-			done = true
-		else
-			addToStored(name, count)
+		if turtle.getItemDetail(i) ~= nil then
+			name = turtle.getItemDetail(i).name
+			count = turtle.getItemDetail(i).count
+			if name == item and count >= quantity and not done then
+				addToStored(name, quantity - count )
+				done = true
+			else
+				addToStored(name, count)
+			end
 		end
 	end
 end
 
 function addToStored(item, quantity)
-	if stored[item] == nil then
-		stored[item] = quantity
+	if mined[item] == nil then
+		mined[item] = quantity
 	else
-		stored[item] = stored[item] + quantity
+		mined[item] = mined[item] + quantity
 	end
 end
 
 function checkMined(item, quantity)
-	if Mined[item] ~= nil and Mined[item] >= quantity then
-		Mined[item] = Mined[item] - quantity
+	if mined[item] ~= nil and mined[item] >= quantity then
+		mined[item] = mined[item] - quantity
 		return true
 	end
 	return false

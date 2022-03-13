@@ -9,13 +9,13 @@ goal["log"]=4
 goal["sand"]=6
 Gather(goal)
 
-target = {}
-target["minecraft:diamond"]=3
-target["minecraft:cobblestone"]=15
-target["minecraft:redstone"]=1
-target["minecraft:iron_ore"]=7
-target["minecraft:coal"]=3
-Mine(target)
+
+Mine("minecraft:diamond",3)
+Mine("minecraft:cobblestone", 15)
+Mine("minecraft:redstone",1)
+Mine("minecraft:iron_ore",7)
+Mine("minecraft:coal",3)
+
 
 
 Craft("merged:planks",16)
@@ -37,8 +37,6 @@ Craft("computercraft:computer_normal",1)
 Craft("minecraft:chest",1)
 Craft("computercraft:turtle_normal",1)
 
-Craft("minecraft:stick", 4)
-Craft("minecraft:diamond_pickaxe",1)
 Craft("computercraft:turtle_mining",1)
 
 Craft("minecraft:crafting_bench",1)

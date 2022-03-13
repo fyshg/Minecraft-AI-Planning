@@ -51,12 +51,13 @@ end
 function Mine(item, quantity)
     -- drop inventory in chests before and after
     if not checkMined(item, quantity) then
+        goal = {}
         goal[item]= quantity
         dropInventory()
         mine(goal)
         navigate(home)
         turn(directions["EAST"])
-        saveExtraMined()
+        saveExtraMined(item, quantity)
         dropInventory(item, quantity)
     end
 
