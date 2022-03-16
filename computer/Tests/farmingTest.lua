@@ -1,7 +1,13 @@
 require("req")
 
+Initiate(arg)
+InitiateChests()
+print("gathering logs")
+Gather("log", 3)
+print_table(mined)
+print("gathering sand")
+Gather("sand", 2)
 
-init_turtle(arg)
-gather_wood({log = 0, sand = 1})
 
-write_pos()
+print_table(mined)
+

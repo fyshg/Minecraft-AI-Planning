@@ -132,7 +132,7 @@ function navigate(position)   -- must use furthest away first tactic ...
 		go_towards(home) --middle to avoid weird collisions
 		if math.abs(offset.x) >= 5 then
 			go_towards(vector.new(position.x, current_pos.y, current_pos.z))
-		elseif  math.abs(offset.y) >= 5 then
+		elseif  math.abs(offset.z) >= 5 then
 			go_towards(vector.new(current_pos.x, current_pos.y, position.z))
 		elseif offset.y <= 2 or offset.y >= 10 then
 			go_towards(vector.new(current_pos.x, position.y, current_pos.z))

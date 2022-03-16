@@ -130,7 +130,7 @@ function countOf(itemname)
 end
 
 function saveExtraMined(item, quantity)
-	done = false
+	local done = false
     countInventory()
     dropAbundantItems()
 	for i = 1,16 do
@@ -145,6 +145,28 @@ function saveExtraMined(item, quantity)
 			end
 		end
 	end
+end
+
+function saveExtraFarmed(item, quantity)
+	countInventory()
+	dropAbundantItems()
+
+	local sand = countOf("minecraft:sand")
+
+	if item == "sand" and sand >= quantity then
+		addToStored("sand", quantity - sand)
+	else
+		addToStored("sand", quantity)
+	end
+
+	local logs = countLogs()
+
+	if item == "log" and logs >= quantity then
+		addToStored("log", quantity - logs)
+	else
+		addToStored("log", quantity)
+	end
+
 end
 
 function addToStored(item, quantity)
