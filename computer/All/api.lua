@@ -63,13 +63,20 @@ function Mine(item, quantity)
 
 end
 
-function Gather(goal)
+function Gather(item,quantity)
     -- drop inventory in chests before and after
-    dropInventory()
-    gather_wood(goal)
-    navigate(home)
-    turn(directions["EAST"])
-    dropInventory()
+
+    if not checkMined(item,quantity) then
+        dropInventory()
+        goal = {}
+        goal[item]= quantity
+        gather_wood(goal)
+        navigate(home)
+        turn(directions["EAST"])
+        saveExtraFarmed(item,quantity)
+        dropInventory()
+
+    end
 end
 
 
