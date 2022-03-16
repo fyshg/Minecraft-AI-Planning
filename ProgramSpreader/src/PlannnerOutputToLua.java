@@ -27,17 +27,33 @@ public class PlannnerOutputToLua {
         }
     }
 
+    public static String fuelID(String fuelName){
+        switch (fuelName){
+            case "coal": return "minecraft:coal";
+            default: return "Unknown fuel";
+        }
+    }
+
+    public static String smeltID(String name){
+        switch (name){
+            case "iron": return "minecraft:iron_ore";
+            case "stone": return "minecraft:cobblestone";
+            case "glass": return "minecraft:sand";
+            default: return "Unknown Block";
+        }
+    }
+
     public static String craftID(String item){
         switch (item){
             case "diamond_pickaxe": return "\"minecraft:diamond_pickaxe\",1";
             case "chest": return "\"minecraft:chest\",1";
-            case "planks": return "\"merged:planks\",1";
+            case "planks": return "\"merged:planks\",4";
             case "computer": return "\"computercraft:computer_normal\",1";
             case "turtle": return "\"computercraft:turtle_normal\",1";
-            case "glass_pane": return "\"minecraft:glass_pane\",1";
+            case "glass_pane": return "\"minecraft:glass_pane\",16";
             case "mining_turtle": return "\"computercraft:turtle_mining\",1";
             case "crafty_turtle": return "\"computercraft:turtle_mining_crafty\",1";
-            case "stick": return "\"minecraft:stick\",1";
+            case "stick": return "\"minecraft:stick\",4";
             case "furnace": return "\"minecraft:furnace\",1";
             case "crafting_table": return "\"minecraft:crafting_bench\",1";
             default: return "Unknown Block";
@@ -58,7 +74,7 @@ public class PlannnerOutputToLua {
 
 
     public static String smeltAction(String itemName, String fuelName){
-        return "Smelt("+itemName+","+FuelValue(fuelName)+","+fuelName+",1)\n";
+        return "Smelt(\""+smeltID(itemName)+"\","+FuelValue(fuelName)+",\""+fuelID(fuelName)+"\",1)\n";
     }
 
     public static String craftAction(String name){
@@ -104,7 +120,7 @@ public class PlannnerOutputToLua {
         Pattern craftAction=Pattern.compile("\\(craft_(.*)\\)");
         Pattern smeltAction=Pattern.compile("\\(smelt_(.*) (.*) (.*) (.*)\\)");
         Matcher farm, sand, mine, craft, smelt, build;
-        String program="Initiate()\nInitiateChests()\n";
+        String program="Require(\"api\")\nInitiate()\nInitiateChests()\n";
         for (String line:plan.split("\n")){
 
             build=buildAction.matcher(line);
