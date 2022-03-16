@@ -69,7 +69,7 @@
 
     (:process farm_sand
         :parameters (?w - sand)
-        :precondition (farming_wood)
+        :precondition (farming_sand)
         :effect (increase (count ?w) (* #t 2))
     )
 
@@ -241,8 +241,8 @@
 
 
     (:action smelt_iron
-        :parameters (   ?i1 - iron_ore
-                        ?i2 - fuel
+        :parameters (   ?i2 - fuel
+                        ?i1 - iron_ore
                         ?o - iron_ingot 
                         )
         :precondition (and  (>= (count ?i1) (fuelvalue ?i2))
@@ -256,9 +256,9 @@
     )
 
     (:action smelt_glass
-        :parameters (   ?i1 - sand
-                        ?i2 - fuel
-                        ?o - glass 
+        :parameters (   ?i2 - fuel
+                        ?i1 - sand
+                        ?o - glass
                         )
         :precondition (and  (>= (count ?i1) (fuelvalue ?i2))
                             (>= (count ?i2) 1)
@@ -272,9 +272,9 @@
 
 
     (:action smelt_stone
-        :parameters (   ?i1 - cobblestone
-                        ?i2 - fuel
-                        ?o - stone 
+        :parameters (   ?i2 - fuel
+                        ?i1 - cobblestone
+                        ?o - stone
                         )
         :precondition (and  (>= (count ?i1) (fuelvalue ?i2))
                             (>= (count ?i2) 1)

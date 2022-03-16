@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ProgramSpreader/ProgramSpreader.iml" filepath="$PROJECT_DIR$/ProgramSpreader/ProgramSpreader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Translator/Translator.iml" filepath="$PROJECT_DIR$/Translator/Translator.iml" />
       <module fileurl="file://$PROJECT_DIR$/computercraft.iml" filepath="$PROJECT_DIR$/computercraft.iml" />
     </modules>
   </component>

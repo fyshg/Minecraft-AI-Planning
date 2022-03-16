@@ -17,7 +17,7 @@ function log(text, name, silent)
 
 
     if type(text)=="table" then
-        for i in pairs(text) do
+        for _,i in pairs(text) do
             log(text[i],i, silent)
         end
         return
@@ -27,8 +27,12 @@ function log(text, name, silent)
         text=tostring(text)
     end
 
+
+
     local h=fs.open("log.txt","a")
     if not silent then print(text.."\n") end
+    text2=getStackTrace(2,3)..": "
+    text=text2..string.rep(" ",100-text2:len())..text
     h.write(text.."\n")
     h.close()
 end

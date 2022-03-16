@@ -4,10 +4,11 @@ require("generalHelpingFunctions")
 require("itemstacksizesandMaxCounts")
 chests={} --contains all information about the count of chests and their content
 totalItemCounts={} -- total item counts over all chests
-itemsWanted={}
+itemsWanted={} -- itemsWanted[itemname]=count
 reserved ={} --contains items reserved for crafting and thus not available
 function writeChestFile()
 	--saves the chests table to file
+	log(" Writing Chest File ")
 	local h=fs.open("chests.michi","w")
 	h.write(textutils.serialize(chests))
 	h.close()
@@ -156,12 +157,13 @@ function inventur()
 end
 
 function storeRest()
+	countInventory()
 	log("Dropping rest in Chests")
 	--stores everything, which is not needed for the recipe, in chests
 	itemsDesignatedForChest={} --itemsDesignatedForChest[3]=List of items, which should be put in Chest 3
 	itemsToStoreInAnyChest={}
 	tmp={} -- List of items needed for crafting, local copy
-	for i in pairs(itemsWanted) do
+	for i,_ in pairs(itemsWanted) do
 		tmp[i]=itemsWanted[i]
 	end
 
@@ -230,7 +232,7 @@ function getFromChests(itemname, count)
 	if count==0 then return end
 	log("Getting "..count.." of "..itemname.." from chests")
 	sortInventory()
-	for i in pairs(itemsWanted) do
+	for i,_ in pairs(itemsWanted) do
 		itemsWanted[i]=nil
 	end
 	if inv[itemname]==nil then
@@ -245,7 +247,8 @@ function getmissing()
 	log("Getting missing items!")
 	sortInventory()
 	local tmp={} -- List of items needed for crafting, local copy
-	for i in pairs(itemsWanted) do
+	for i,_ in pairs(itemsWanted) do
+		log("Item Wanted: "..i.." count "..itemsWanted[i])
 		tmp[i]=itemsWanted[i]
 		if inv[i]~=nil then
 			tmp[i]=tmp[i]-inv[i]
@@ -277,7 +280,8 @@ function getmissing()
 	end
 
 --get the items
-	for i =  1,chests.count do
+
+	for i =  1,chests.count  do
 		--if a searched item is in chest i go there
 		if toGet[i]~=nil then
 			log("Getting from chest "..i)
@@ -316,13 +320,14 @@ function getmissing()
 				end
 			end
 			for j=ind,chests[i].stackCount do
-				chests[i][j]=nil
+				chests[i].items[j]=nil
 			end
 			chests[i].stackCount=ind-1
 			sortInventory()
 		end
 	end
 	gotoStart()
+	print_table(chests)
 	writeChestFile()
 end
 
@@ -360,15 +365,34 @@ end
 
 function getItemsFor( itemname, count )
 	log("Getting items from chests: for "..itemname.." x "..count)
+	sumInventoryAndAllChests()
 	count=count or 1
 	setRecipe(itemname, count)
 	countInventory()
 	--check Which items are needed
-	for i in pairs(itemsWanted) do
+	for i,_ in pairs(itemsWanted) do
 		itemsWanted[i]=nil
 	end
-	for i in pairs(itemsNeeded) do
-		itemsWanted[i]=itemsNeeded[i]
+	for i,_ in pairs(itemsNeeded) do
+		if i=="woods" then
+			local tmp=itemsNeeded[i]
+			for _,k in pairs(woods) do
+				if (tmp>0 and totalItemCounts[k]~=nil and totalItemCounts[k]>0) then
+					itemsWanted[k]=math.min(totalItemCounts[k],tmp)
+					tmp=tmp-itemsWanted[k]
+				end
+			end
+		elseif i=="planks" then
+			local tmp=itemsNeeded[i]
+			for _,k in pairs(planks) do
+				if (tmp>0 and totalItemCounts[k]~=nil and totalItemCounts[k]>0) then
+					itemsWanted[k]=math.min(totalItemCounts[k],tmp)
+					tmp=tmp-itemsWanted[k]
+				end
+			end
+		else
+			itemsWanted[i]=itemsNeeded[i]
+		end
 	end
 	--store the rest in chests
 	storeRest()
@@ -380,12 +404,12 @@ function sumInventoryAndAllChests()
 	log("Summing up inventory and Chests")
 	countInventory()
 	--reset totalitemcounts
-	for t in pairs(totalItemCounts) do
+	for t,_ in pairs(totalItemCounts) do
 		totalItemCounts[t]=nil
 	end
 	--log("Counting in inventory")
 	--count from inventory
-	for i in pairs(inv) do
+	for i,_ in pairs(inv) do
 		--log(i)
 		--log(items[i])
 		totalItemCounts[i]=inv[i]
@@ -413,7 +437,7 @@ end
 
 function itemsAvailable(itemname, count, mindReservations)
 	mindReservations = mindReservations or false
-	--for i in pairs(totalItemCounts) do
+	--for i,_ in pairs(totalItemCounts) do
 	--	log(i.."  "..totalItemCounts[i])
 	--end
 	if totalItemCounts[itemname]==nil then

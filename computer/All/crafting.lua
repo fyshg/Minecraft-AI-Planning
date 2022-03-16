@@ -1,4 +1,6 @@
 require("recipes")
+
+--[[
 function itemsToCraftAvailable(itemname, count, recursion, useExistingItems, withCurrentReservations)
     if withCurrentReservations== nil then withCurrentReservations=false end
     if recursion==nil then recursion=true end
@@ -26,10 +28,10 @@ function itemsToCraftAvailableHelper(itemname, count, recursion, notFirstStep)
                 return false
             end
             local itemsWanted={}
-            for i in pairs(itemsNeeded) do
+            for i,_ in pairs(itemsNeeded) do
                 itemsWanted[i]=itemsNeeded[i]
             end
-            for i in pairs(itemsWanted) do
+            for i,_ in pairs(itemsWanted) do
                 if recursion then
                     if not itemsToCraftAvailableHelper(i,itemsWanted[i],recursion,true) then
                         log(i.." not available!")
@@ -46,41 +48,89 @@ function itemsToCraftAvailableHelper(itemname, count, recursion, notFirstStep)
     log(itemname.." available!")
     return true
 end
+]]--
 
-function craft(itemname, count, checkForAvailability, alsoGetAlreadyExistingItems)
-    log("Crafting "..itemname.." x "..count.." directly")
+function craft(recipeID, count, checkForAvailability, alsoGetAlreadyExistingItems)
+    setRecipe(recipeID, count)
+    if recipeID =="computercraft:turtle_mining_crafty" then
+            craftTurtle(recipeID, count)
+        return true
+    end
+    log("Crafting "..recipeID.." x "..count.." directly")
     checkForAvailability=checkForAvailability or false
     if checkForAvailability then
+        log("Warning: checkForAvailability is set true in craft: shouldn't be so!")
         if not itemsToCraftAvailable(itemname,count,false, alsoGetAlreadyExistingItems) then
             return false
         end
     end
     if (alsoGetAlreadyExistingItems) then
-        max=maximumItemCountAvailable(itemname)
+        log("Warning: alsoGetAlreadyExistingItems is set true in craft: shouldn't be so!")
+        max=maximumItemCountAvailable(recipeID)
         if max>=count then
             log("Items already available in Chests/Inventory!")
-            getFromChests(itemname,count)
+            getFromChests(recipeID,count)
         else
             craft(itemname,count-max,false,false)
-            getFromChests(itemname,max)
+            getFromChests(recipeID,max)
         end
         return true
     end
     log("Getting items!")
+    log("Crafting "..count.." items, maximal count of items to be crafted in one Batch is "..maxCount)
     -- if too many items need to be crafted, crafting needs to be repeated multiple times
     for i=1,math.floor(count/maxCount) do
         log("Getting a full batch!")
-        getItemsFor(itemname,maxCount)
-        turtle.craft(count)
+        getItemsFor(recipeID,maxCount)
+        arrangeInventoryToRecipe()
+        turtle.craft(maxCount)
     end
-    log("Getting items for "..itemname.." x "..(count%maxCount))
-    getItemsFor(itemname,count%maxCount)
-    arrangeInventoryToRecipe()
-    turtle.craft(count%maxCount)
+    if count%maxCount>0 then
+        log("Getting items for "..recipeID.." x "..(count%maxCount))
+        getItemsFor(recipeID,count%maxCount)
+        arrangeInventoryToRecipe()
+        turtle.craft(count%maxCount)
+    end
     return true
 end
+-- crafts exactly one crafty mining turtle
+function craftTurtle(recipeID, count)
+    sumInventoryAndAllChests()
+    for i,_ in pairs(itemsWanted) do
+        itemsWanted[i]=nil
+    end
+    itemsWanted["minecraft:diamond_pickaxe"]=1
+    itemsWanted["computercraft:turtle_normal"]= 1
+    getmissing()
+    storeRest()
 
-function craftRecursively(itemname, count, checkForAvailability, alsoGetAlreadyExistingItems)
+    setRecipe("computercraft:turtle_mining",1)
+    arrangeInventoryToRecipe()
+    turtle.craft()
+
+    countInventory()
+    turtle.select(slot["computercraft:turtle_normal"])
+    turtle.transferTo(13)
+
+    sumInventoryAndAllChests()
+    for i,_ in pairs(itemsWanted) do
+        itemsWanted[i]=nil
+    end
+
+    itemsWanted["minecraft:crafting_table"]=1
+    getmissing()
+    setRecipe("computercraft:turtle_mining_crafty",1)
+    arrangeInventoryToRecipe()
+    turtle.craft()
+
+
+end
+
+function swap(this, other)
+
+end
+
+--[[function craftRecursively(itemname, count, checkForAvailability, alsoGetAlreadyExistingItems)
     checkForAvailability=checkForAvailability or false
     if checkForAvailability then
         if not itemsToCraftAvailable(itemname,count,true, alsoGetAlreadyExistingItems) then
@@ -138,3 +188,4 @@ function craftRecursively(itemname, count, checkForAvailability, alsoGetAlreadyE
     end
     return true
 end
+]]--

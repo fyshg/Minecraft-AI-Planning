@@ -1,16 +1,18 @@
 require("itemstacksizesAndMaxCounts")
-inv={} --inv[itemname], contains name, count
+inv={} --inv[itemname], contains count
 items={} --array of itemdetails
 slot={} --slot[itemname] tells in which slot <itemname> is
 
+mined = {}
+
 function resetInv()
-	for i in pairs(inv) do
+	for i,_ in pairs(inv) do
 		inv[i]=nil
 	end
-	for i in pairs(slot) do
+	for i,_ in pairs(slot) do
 		slot[i]=nil
 	end
-	for i in pairs(items) do
+	for i,_ in pairs(items) do
 		items[i]=nil
 	end
 end
@@ -127,3 +129,36 @@ function countOf(itemname)
 	return inv[itemname]
 end
 
+function saveExtraMined(item, quantity)
+	done = false
+    countInventory()
+    dropAbundantItems()
+	for i = 1,16 do
+		if turtle.getItemDetail(i) ~= nil then
+			name = turtle.getItemDetail(i).name
+			count = turtle.getItemDetail(i).count
+			if name == item and count >= quantity and not done then
+				addToStored(name, quantity - count )
+				done = true
+			else
+				addToStored(name, count)
+			end
+		end
+	end
+end
+
+function addToStored(item, quantity)
+	if mined[item] == nil then
+		mined[item] = quantity
+	else
+		mined[item] = mined[item] + quantity
+	end
+end
+
+function checkMined(item, quantity)
+	if mined[item] ~= nil and mined[item] >= quantity then
+		mined[item] = mined[item] - quantity
+		return true
+	end
+	return false
+end

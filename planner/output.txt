@@ -1,0 +1,59 @@
+Domain parsed
+Problem parsed
+Grounding..
+Light Validation Completed
+Delta time validation model:1
+Delta time execution model:1.0
+Delta time heuristic model:1.0
+Delta Max:1
+Simplification..
+Grounding and Simplification finished
+|A|:14
+|P|:3
+|E|:0
+Running WA-STAR
+Reachable actions and processes: |A U P U E|:17
+Take all reachable actions
+Actions used at init:14
+h(n = s_0)=81.0
+f(n) = 81.0 (Expanded Nodes: 0, Evaluated States: 0, Time: 0.077)
+f(n) = 82.0 (Expanded Nodes: 2, Evaluated States: 3, Time: 0.087)
+Problem Solved
+Epsilon set to be:0.0
+(0.00000) start_farming_wood Parameters: 
+(0.00000,2.00000)------>waiting
+(2.00000) start_mining Parameters: 
+(2.00000,4.00000)------>waiting
+(4.00000) start_farming_wood Parameters: 
+(4.00000,6.00000)------>waiting
+(6.00000) smelt_glass Parameters: coal  - coal  sand  - sand  glass  - glass  
+(6.00000) craft_glass_pane Parameters: glass  - glass  glass_pane  - glass_pane  
+(6.00000) start_mining Parameters: 
+(6.00000,7.00000)------>waiting
+(7.00000) craft_oak_planks Parameters: oak_wood  - oak_wood  oak_planks  - oak_planks  
+(7.00000,8.00000)------>waiting
+(8.00000) smelt_iron Parameters: coal  - coal  iron_ore  - iron_ore  iron_ingot  - iron_ingot  
+(8.00000) smelt_stone Parameters: coal  - coal  cobblestone  - cobblestone  stone  - stone  
+(8.00000) craft_oak_planks Parameters: oak_wood  - oak_wood  oak_planks  - oak_planks  
+(8.00000) craft_chest Parameters: oak_planks  - oak_planks  chest  - chest  
+(8.00000) craft_computer Parameters: stone  - stone  glass_pane  - glass_pane  redstone  - redstone  computer  - computer  
+(8.00000) craft_turtle Parameters: iron_ingot  - iron_ingot  computer  - computer  chest  - chest  turtle  - turtle  
+(8.00000) craft_oak_planks Parameters: oak_wood  - oak_wood  oak_planks  - oak_planks  
+(8.00000) craft_stick Parameters: oak_planks  - oak_planks  stick  - stick  
+(8.00000) craft_diamond_pickaxe Parameters: diamond  - diamond  stick  - stick  diamond_pickaxe  - diamond_pickaxe  
+(8.00000) craft_mining_turtle Parameters: turtle  - turtle  diamond_pickaxe  - diamond_pickaxe  mining_turtle  - mining_turtle  
+
+Resolution for validation:1.0
+(Pddl+ semantics) Plan is valid:true
+Plan-Length:25
+Planning Time:838
+Heuristic Time:152
+Search Time:244
+Expanded Nodes:97
+States Evaluated:242
+Duration:8.0000000
+Total Cost:0.0
+Fixed constraint violations during search (zero-crossing):0
+Number of Dead-Ends detected:0
+Number of Duplicates detected:196
+Number of LP invocations:0

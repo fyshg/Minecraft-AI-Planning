@@ -5,8 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 public class Spreader {
-    final static int TURTLECOUNT=6;
-    final static int [] TURTLESWHICHGETTESTS={1,2,3,4,5};
+    final static int TURTLECOUNT=10;
+    final static int [] TURTLESWHICHGETTESTS={0,1,2,3,4,5,6,7,8,9};
     final static boolean REMOVEREST=true;
     public static void main(String[] args) {
         if (REMOVEREST){

@@ -1,0 +1,2 @@
+require("req")
+log("Hello")
