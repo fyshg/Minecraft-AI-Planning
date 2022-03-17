@@ -123,7 +123,7 @@ public class PlannnerOutputToLua {
         Pattern craftAction=Pattern.compile("\\(craft_(.*)\\)");
         Pattern smeltAction=Pattern.compile("\\(smelt_(.*) (.*) (.*) (.*)\\)");
         Matcher farm, sand, mine, craft, smelt, build;
-        String program="Require(\"api\")\nInitiate()\nInitiateChests()\n";
+        String program="require(\"api\")\nInitiate()\nInitiateChests()\n";
         for (String line:plan.split("\n")){
 
             build=buildAction.matcher(line);
