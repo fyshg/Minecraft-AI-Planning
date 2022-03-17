@@ -20,9 +20,9 @@ public class PlannnerOutputToLua {
         switch (blockName){
             case "iron": return "minecraft:iron_ore";
             case "cobblestone": return "minecraft:cobblestone";
-            case "diamond": return "minecraft:diamond_ore";
-            case "redstone": return "minecraft:redstone_ore";
-            case "coal": return "minecraft:coal_ore";
+            case "diamond": return "minecraft:diamond";
+            case "redstone": return "minecraft:redstone";
+            case "coal": return "minecraft:coal";
             default: return "Unknown Block";
         }
     }
@@ -83,7 +83,10 @@ public class PlannnerOutputToLua {
 
     public static void main(String[] args) throws Exception {
         File in=new File("C:\\Users\\micha\\curseforge\\minecraft\\Instances\\Computercraft - Uni\\saves\\New World (1)\\computercraft\\Minecraft\\Planner\\plan.txt");
-        File out=new File("C:\\Users\\micha\\curseforge\\minecraft\\Instances\\Computercraft - Uni\\saves\\New World (1)\\computercraft\\Minecraft\\computer\\All\\plan.lua");
+        //File out=new File("C:\\Users\\micha\\curseforge\\minecraft\\Instances\\Computercraft - Uni\\saves\\New World (1)\\computercraft\\Minecraft\\computer\\All\\plan.lua");
+
+        File out = new File("C:\\Users\\micha\\curseforge\\minecraft\\Instances\\Computercraft - Uni\\saves\\New World (1)\\computercraft\\Minecraft\\computer\\All\\plan.txt");
+        System.out.println(out.getAbsolutePath());
         BufferedReader br = null;
         if (!out.exists()) {
             out.createNewFile();
