@@ -4,10 +4,8 @@ Initiate()
 
 InitiateChests()
 
-goal = {}
-goal["log"]=4
-goal["sand"]=6
-Gather(goal)
+Gather("log",4)
+Gather("sand",6)
 
 
 Mine("minecraft:diamond",3)

@@ -49,6 +49,7 @@ function InitiateChests()
 end
 
 function Mine(item, quantity)
+    log("------------Mining: "..item.."quantity: "..quantity.."------------------------")
     -- drop inventory in chests before and after
     if not checkMined(item, quantity) then
         goal = {}
@@ -65,6 +66,7 @@ end
 
 function Gather(item,quantity)
     -- drop inventory in chests before and after
+    log("------------Gather: "..item.."quantity: "..quantity.."------------------------")
 
     if not checkMined(item,quantity) then
         dropInventory()
@@ -83,7 +85,7 @@ end
 -- Requirement:  Furnace in storage
 -- Reward: Smelting is now available
 function PlaceFurnace()
-
+    log("------------ Placing Furnace ------------------------")
     itemsWanted["minecraft:furnace"] = 1
     getmissing()
     build_furnace()
@@ -94,7 +96,7 @@ end
 -- Requirement: Chest in Inventory
 -- Reward: Storage System yay
 function PlaceChest()
-
+    log("------------ Placing Chest ------------------------")
     itemsWanted["minecraft:chest"] = 1
     getmissing()
     build_chest()
@@ -106,6 +108,7 @@ end
 --Requirement: Items needed for crafting in inventory or chest
 --Reward: Items get crafted
 function Craft(itemname, itemcount)
+    log("------------Crafting: "..itemname.."quantity: "..itemcount.."------------------------")
     craft(itemname, itemcount, false, false)
     dropInventory()
 end
@@ -113,6 +116,7 @@ end
 -- Requirement: Furnace placed, Items in Inventory
 -- Reward: new Materials
 function Smelt(itemname, itemcount, fuelname, fuelcount)
+    log("------------Smelting: "..itemname.."quantity: "..itemcount.."------------------------")
     smelt(itemname, itemcount, fuelname, fuelcount)
     go_towards(home)
     turn(directions["EAST"])

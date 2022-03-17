@@ -1,9 +1,10 @@
-
+require('movement')
 --This class initializes a new turtle. If you want to resume the session of an existing turtle just make
 --sure to call read_pos() before doing anythin else. Then it should work
 
 
 function init_turtle(arg)
+	log("i was excecuted")
 	if arg ~= nil and #arg == 4 then
 		current_pos = vector.new(arg[1], arg[2], arg[3])
 		current_dir = directions[tostring(arg[4])]
@@ -11,6 +12,7 @@ function init_turtle(arg)
 		current_pos = vector.new(-460, 66,207)
 		current_dir = directions["EAST"]
 	end
+	home = vector.new(current_pos.x, current_pos.y, current_pos.z)
 	write_pos()
 
 	spiral = {}

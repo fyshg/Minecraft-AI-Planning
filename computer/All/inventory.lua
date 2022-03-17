@@ -138,13 +138,14 @@ function saveExtraMined(item, quantity)
 			name = turtle.getItemDetail(i).name
 			count = turtle.getItemDetail(i).count
 			if name == item and count >= quantity and not done then
-				addToStored(name, quantity - count )
+				addToStored(name, count - quantity )
 				done = true
 			else
 				addToStored(name, count)
 			end
 		end
 	end
+	print_table(mined)
 end
 
 function saveExtraFarmed(item, quantity)
@@ -154,7 +155,7 @@ function saveExtraFarmed(item, quantity)
 	local sand = countOf("minecraft:sand")
 
 	if item == "sand" and sand >= quantity then
-		addToStored("sand", quantity - sand)
+		addToStored("sand", sand - quantity)
 	else
 		addToStored("sand", quantity)
 	end
@@ -162,11 +163,11 @@ function saveExtraFarmed(item, quantity)
 	local logs = countLogs()
 
 	if item == "log" and logs >= quantity then
-		addToStored("log", quantity - logs)
+		addToStored("log", logs - quantity)
 	else
 		addToStored("log", quantity)
 	end
-
+	print_table(mined)
 end
 
 function addToStored(item, quantity)
@@ -178,8 +179,10 @@ function addToStored(item, quantity)
 end
 
 function checkMined(item, quantity)
+	print_table(mined)
 	if mined[item] ~= nil and mined[item] >= quantity then
 		mined[item] = mined[item] - quantity
+		print_table(mined)
 		return true
 	end
 	return false
