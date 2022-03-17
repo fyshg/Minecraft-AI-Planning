@@ -1,4 +1,4 @@
-Require("api")
+require("api")
 Initiate()
 InitiateChests()
 Mine("minecraft:iron_ore",1)
