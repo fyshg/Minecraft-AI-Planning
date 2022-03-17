@@ -82,10 +82,10 @@ public class PlannnerOutputToLua {
     }
 
     public static void main(String[] args) throws Exception {
-        File in=new File("C:\\Users\\micha\\curseforge\\minecraft\\Instances\\Computercraft - Uni\\saves\\New World (1)\\computercraft\\Minecraft\\Planner\\plan.txt");
+        //File in=new File("C:\\Users\\micha\\curseforge\\minecraft\\Instances\\Computercraft - Uni\\saves\\New World (1)\\computercraft\\Minecraft\\Planner\\plan.txt");
         //File out=new File("C:\\Users\\micha\\curseforge\\minecraft\\Instances\\Computercraft - Uni\\saves\\New World (1)\\computercraft\\Minecraft\\computer\\All\\plan.lua");
-
-        File out = new File("C:\\Users\\micha\\curseforge\\minecraft\\Instances\\Computercraft - Uni\\saves\\New World (1)\\computercraft\\Minecraft\\computer\\All\\plan.txt");
+        File in=new File("Planner\\plan.txt");
+        File out = new File("computer\\All\\plan.lua");
         System.out.println(out.getAbsolutePath());
         BufferedReader br = null;
         if (!out.exists()) {
