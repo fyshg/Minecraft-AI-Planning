@@ -161,16 +161,17 @@ function storeRest()
 	log("Dropping rest in Chests")
 	--stores everything, which is not needed for the recipe, in chests
 	itemsDesignatedForChest={} --itemsDesignatedForChest[3]=List of items, which should be put in Chest 3
-	itemsToStoreInAnyChest={}
-	tmp={} -- List of items needed for crafting, local copy
-	for i,_ in pairs(itemsWanted) do
-		tmp[i]=itemsWanted[i]
+	itemsToStoreInAnyChest={} -- list of Items which can be put anywhere. itemsToStore[i]= j means j items from slot i can be put anywhere
+
+
+	local tmp=copyTable(itemsWanted)-- List of items which should be kept
+	--check, in which chests to put which items
+	local minChestIndexForPossibleTarget = {}
+	for i,_ in pairs(inventory_inv) do
+		minChestIndexForPossibleTarget[i]=1
 	end
-
-
---check, in which chests to put which items
 	for i=1,16 do
-		local it=items[i]
+		local it= inventory_items[i]
 		if it~=nil then
 			local putCount=it.count
 			if tmp[it["name"]]~=nil then
@@ -180,24 +181,32 @@ function storeRest()
 					if tmp[it["name"]]==0 then
 						tmp[it["name"]]=nil
 					end
-
 				end
 			end
-			if putCount~=0 then
+			log("Looking for PLace for "..putCount.." items")
+			while putCount~=0 do
 				-- look for a chest to put "it" in
-				local target=findChestFor(it.name,putCount)
+				local target=findChestFor(it.name,putCount, minChestIndexForPossibleTarget[it.name])
+				log("Target is: ")
+				log(target)
+				log("PutCount: "..putCount)
 				if target==nil then
 					itemsToStoreInAnyChest[i]=putCount
+					putCount = 0
 				else
-					if itemsDesignatedForChest[target.chestIndex]==nil then itemsDesignatedForChest[target.chestIndex]={} end
-					itemsDesignatedForChest[target.chestIndex][i]=target["count"]
+					if itemsDesignatedForChest[target.chestIndex]==nil then
+						itemsDesignatedForChest[target.chestIndex]={}
+					end
+					itemsDesignatedForChest[target.chestIndex][i]=target.count
+					putCount = putCount - target.count
+					minChestIndexForPossibleTarget[it.name] = target.chestIndex + 1
 				end
 			end
 		end
 	end
 
 
---go from one chest to the next and store the items there
+	--go from one chest to the next and store the items there
 	for i=1,chests.count do
 		if chests[i]["stackCount"]<8 and tableSize(itemsToStoreInAnyChest)~=0 or itemsDesignatedForChest[i]~=nil then
 			gotoChest(i)
@@ -206,7 +215,7 @@ function storeRest()
 					--log("Putting designated items to chest ",i)
 					turtle.select(j)
 					turtle.drop(itemsDesignatedForChest[i][j])
-					addItemToChest(i,items[j].name,itemsDesignatedForChest[i][j])
+					addItemToChest(i, inventory_items[j].name,itemsDesignatedForChest[i][j])
 					itemsDesignatedForChest[i][j]=nil
 				end
 			end
@@ -215,7 +224,7 @@ function storeRest()
 					--log("Putting undesignated items to chest",i)
 					turtle.select(j)
 					turtle.drop(itemsToStoreInAnyChest[j])
-					addItemToChest(i,items[j].name,itemsToStoreInAnyChest[j])
+					addItemToChest(i, inventory_items[j].name,itemsToStoreInAnyChest[j])
 					itemsToStoreInAnyChest[j]=nil
 				else
 					break
@@ -262,7 +271,7 @@ function getmissing()
 	toGet={}-- toGet[i][j]= count of items to take from chest i, slot j
 	for i = 1,chests["count"] do
 		toGet[i]={}
-		for j=1,8 do
+		for j=8,1,-1 do
 			if chests[i].items[j]~=nil then
 				local c=tmp[chests[i].items[j].name]
 				if c~=nil then
@@ -350,12 +359,13 @@ function addItemToChest(chest,name,count)
 	return false
 end
 
-function findChestFor(item,count)
-	for i=1,chests["count"] do
+function findChestFor(item,Count, minChestIndexForPossibleTarget)
+	for i=minChestIndexForPossibleTarget,chests["count"] do
 		for j=1,chests[i]["stackCount"] do
 			if chests[i]["items"][j]~=nil and chests[i]["items"][j]["name"]==item then
 				if chests[i]["items"][j]["count"]<getStackSize(item) then
-					return {chestIndex=i, count=math.min(count, getStackSize(item)-chests[i]["items"][j]["count"])}
+					log("Stacksize: "..getStackSize(item)..", itemCount: "..chests[i]["items"][j]["count"]..", Count: "..Count)
+					return {chestIndex=i, count=math.min(Count, getStackSize(item)-chests[i]["items"][j]["count"])}
 				end
 			end
 		end
