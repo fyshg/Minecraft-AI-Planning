@@ -150,7 +150,7 @@ public class PlannnerOutputToLua {
             }
 
             if (build.matches()){
-                program+=buildAction();
+                program+=buildAction(); 
             }
         }
         BufferedWriter bw=new BufferedWriter(new FileWriter(out));
