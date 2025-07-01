@@ -1,5 +1,7 @@
 ## Minecraft Turtle Planning
 
+A Report of evrything, in German may be found in Minecraft.pdf
+
 # Goal
 
 This project will implement various scripts for Minecraft turtles, which will allow them to work on their own. 
