@@ -1,6 +1,6 @@
 ## Minecraft Turtle Planning
 
-A Report of evrything, in German may be found in Minecraft.pdf
+A Report of everything, in German may be found in Minecraft.pdf
 
 # Goal
 
